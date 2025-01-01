@@ -5,18 +5,19 @@ import { Agent } from '../types';
 import { useAgentFiltering } from '../hooks/useAgentFiltering';
 import MapHeader from './MapHeader';
 import { useMapState } from './MapState';
+import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const MapComponent = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const navigate = useNavigate();
   
   const { agents, isLoading, error, groupedAgents } = useMapState();
 
-  // Show all agents by default, filter only when there's a search
-  const displayedAgents = searchLocation 
-    ? useAgentFiltering(agents, searchLocation).nearbyAgents 
-    : agents || [];
+  // Always show all agents, filter only when there's a search
+  const displayedAgents = agents || [];
 
   const handleSearch = (location: { lat: number; lng: number }) => {
     setSearchLocation(location);
@@ -59,6 +60,14 @@ const MapComponent = () => {
         onClosePanel={() => setIsPanelVisible(false)}
       />
       <MapHeader />
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <Button 
+          onClick={() => navigate('/register')}
+          className="bg-primary text-white shadow-lg hover:bg-primary/90"
+        >
+          Want to appear here?
+        </Button>
+      </div>
     </div>
   );
 };
