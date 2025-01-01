@@ -23,7 +23,7 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
       </div>
       
       <div className="overflow-y-auto h-[calc(100%-2.5rem)] p-2">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
           {agents.map((agent) => (
             <motion.div
               key={agent.id}
@@ -33,20 +33,20 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
               transition={{ duration: 0.2 }}
             >
               <Card
-                className="cursor-pointer hover:shadow-md transition-all duration-200 transform hover:-translate-y-1 bg-white/70 backdrop-blur-sm h-40"
+                className="cursor-pointer hover:shadow-md transition-all duration-200 transform hover:-translate-y-1 bg-white/70 backdrop-blur-sm h-32 w-full"
                 onClick={() => onSelectAgent(agent)}
               >
-                <div className="h-20 relative overflow-hidden rounded-t-lg">
+                <div className="h-16 relative overflow-hidden rounded-t-lg">
                   <img
                     src={agent.photo || '/placeholder.svg'}
                     alt={agent.name}
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="p-2">
+                <div className="p-1.5">
                   <h3 className="font-medium text-xs truncate">{agent.name}</h3>
-                  <p className="text-xs text-gray-500 truncate">{agent.agency}</p>
-                  <p className="text-xs text-gray-500 truncate">{agent.area}</p>
+                  <p className="text-[10px] text-gray-500 truncate">{agent.agency}</p>
+                  <p className="text-[10px] text-gray-500 truncate">{agent.area}</p>
                 </div>
               </Card>
             </motion.div>
