@@ -6,9 +6,10 @@ interface AgentMarkerProps {
   agent: Agent;
   map: mapboxgl.Map;
   onSelect: (agent: Agent) => void;
+  agentCount?: number;
 }
 
-const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
+const AgentMarker = ({ agent, map, onSelect, agentCount }: AgentMarkerProps) => {
   const markerRef = useRef<mapboxgl.Marker | null>(null);
   const elementRef = useRef<HTMLDivElement | null>(null);
 
@@ -21,11 +22,19 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
       elementRef.current = el;
       el.className = 'agent-marker';
       el.innerHTML = `
-        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white 
-                    transform transition-transform hover:scale-110 cursor-pointer shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-          </svg>
+        <div class="relative">
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-lg 
+                      transform transition-transform hover:scale-110 cursor-pointer">
+            <img src="${agent.photo || '/placeholder.svg'}" 
+                 class="w-full h-full object-cover" 
+                 alt="${agent.name}" />
+          </div>
+          ${agentCount ? `
+            <div class="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full w-5 h-5 
+                        flex items-center justify-center border border-white">
+              ${agentCount}
+            </div>
+          ` : ''}
         </div>
       `;
 
@@ -34,12 +43,10 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
         markerRef.current.remove();
       }
 
-      // Create and add new marker with rotation and pitch alignment to prevent movement
+      // Create and add new marker
       markerRef.current = new mapboxgl.Marker({
         element: el,
-        draggable: false,
-        rotationAlignment: 'map',
-        pitchAlignment: 'map'
+        anchor: 'bottom',
       })
         .setLngLat([agent.longitude, agent.latitude])
         .addTo(map);
@@ -62,7 +69,7 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
     } catch (error) {
       console.error('Error creating marker:', error);
     }
-  }, [agent, map, onSelect]);
+  }, [agent, map, onSelect, agentCount]);
 
   return null;
 };

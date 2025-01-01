@@ -10,6 +10,8 @@ interface MapLayoutProps {
   nearbyAgents: Agent[];
   selectedAgent: Agent | null;
   onSelectAgent: (agent: Agent | null) => void;
+  isPanelVisible: boolean;
+  onClosePanel: () => void;
 }
 
 const MapLayout = ({
@@ -18,6 +20,8 @@ const MapLayout = ({
   nearbyAgents,
   selectedAgent,
   onSelectAgent,
+  isPanelVisible,
+  onClosePanel,
 }: MapLayoutProps) => {
   return (
     <div className="absolute inset-0 z-50 pointer-events-none">
@@ -27,7 +31,8 @@ const MapLayout = ({
       <AgentList
         agents={nearbyAgents}
         onSelectAgent={onSelectAgent}
-        visible={!!searchLocation}
+        visible={isPanelVisible}
+        onClose={onClosePanel}
       />
       {selectedAgent && (
         <div className="pointer-events-auto">

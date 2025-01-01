@@ -8,9 +8,10 @@ interface MapContainerProps {
   agents: Agent[];
   onSelectAgent: (agent: Agent) => void;
   center?: { lat: number; lng: number } | null;
+  groupedAgents: Map<string, Agent[]>;
 }
 
-const MapContainer = ({ agents, onSelectAgent, center }: MapContainerProps) => {
+const MapContainer = ({ agents, onSelectAgent, center, groupedAgents }: MapContainerProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -53,7 +54,6 @@ const MapContainer = ({ agents, onSelectAgent, center }: MapContainerProps) => {
     };
   }, []);
 
-  // Update map center when search location changes
   useEffect(() => {
     if (map.current && center) {
       map.current.flyTo({
@@ -66,14 +66,18 @@ const MapContainer = ({ agents, onSelectAgent, center }: MapContainerProps) => {
 
   return (
     <div ref={mapContainer} className="absolute inset-0 z-0">
-      {map.current && agents && agents.map(agent => (
-        <AgentMarker
-          key={agent.id}
-          agent={agent}
-          map={map.current!}
-          onSelect={onSelectAgent}
-        />
-      ))}
+      {map.current && Array.from(groupedAgents.entries()).map(([key, agentsAtLocation]) => {
+        const [firstAgent] = agentsAtLocation;
+        return (
+          <AgentMarker
+            key={key}
+            agent={firstAgent}
+            map={map.current!}
+            onSelect={onSelectAgent}
+            agentCount={agentsAtLocation.length > 1 ? agentsAtLocation.length : undefined}
+          />
+        );
+      })}
     </div>
   );
 };

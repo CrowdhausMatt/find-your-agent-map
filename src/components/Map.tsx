@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import MapContainer from './MapContainer';
 import MapLayout from './MapLayout';
@@ -51,6 +51,7 @@ const fetchAgents = async () => {
 const Map = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
   
   const { data: agents, isLoading, error } = useQuery({
     queryKey: ['agents'],
@@ -59,9 +60,34 @@ const Map = () => {
 
   const { nearbyAgents } = useAgentFiltering(agents, searchLocation);
 
+  // Group agents by location
+  const groupedAgents = useMemo(() => {
+    if (!agents) return new Map();
+    
+    const groups = new Map<string, Agent[]>();
+    agents.forEach(agent => {
+      const key = `${agent.latitude},${agent.longitude}`;
+      const existing = groups.get(key) || [];
+      groups.set(key, [...existing, agent]);
+    });
+    return groups;
+  }, [agents]);
+
   const handleSearch = (location: { lat: number; lng: number }) => {
     setSearchLocation(location);
     setSelectedAgent(null);
+    setIsPanelVisible(true);
+  };
+
+  const handleSelectAgent = (agent: Agent) => {
+    const key = `${agent.latitude},${agent.longitude}`;
+    const agentsAtLocation = groupedAgents.get(key) || [];
+    
+    if (agentsAtLocation.length > 1) {
+      setIsPanelVisible(true);
+    } else {
+      setSelectedAgent(agent);
+    }
   };
 
   if (isLoading) return <div className="w-full h-screen flex items-center justify-center">Loading agents...</div>;
@@ -73,8 +99,9 @@ const Map = () => {
       <div className="absolute inset-0">
         <MapContainer
           agents={agents}
-          onSelectAgent={setSelectedAgent}
+          onSelectAgent={handleSelectAgent}
           center={searchLocation}
+          groupedAgents={groupedAgents}
         />
       </div>
       <MapLayout
@@ -83,7 +110,21 @@ const Map = () => {
         nearbyAgents={nearbyAgents || []}
         selectedAgent={selectedAgent}
         onSelectAgent={setSelectedAgent}
+        isPanelVisible={isPanelVisible}
+        onClosePanel={() => setIsPanelVisible(false)}
       />
+      <a
+        href="https://knokknok.social/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute top-4 right-4 z-50 w-24 h-auto hover:opacity-80 transition-opacity"
+      >
+        <img
+          src="/lovable-uploads/b050625e-3d9e-4034-98dd-18b568b1327e.png"
+          alt="Knok Knok"
+          className="w-full h-full object-contain"
+        />
+      </a>
     </div>
   );
 };
