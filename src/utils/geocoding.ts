@@ -5,15 +5,15 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
   const accessToken = mapboxgl.accessToken;
   
   // Clean and truncate the location name to avoid query length issues
-  // Only take the first part before any comma or separator
-  const cleanedLocation = locationName.split(/[,|&]/)[0].trim();
+  // Only take the first part before any comma or separator and limit to 100 chars
+  const cleanedLocation = locationName.split(/[,|&]/)[0].trim().substring(0, 100);
   
   // Add London context but keep query short
-  const searchQuery = `${cleanedLocation}, London`;
+  const searchQuery = `${cleanedLocation}, London, UK`;
   
   try {
     const response = await fetch(
-      `${baseUrl}/${encodeURIComponent(searchQuery)}.json?access_token=${accessToken}&limit=1`
+      `${baseUrl}/${encodeURIComponent(searchQuery)}.json?access_token=${accessToken}&limit=1&country=GB`
     );
     
     if (!response.ok) {

@@ -18,6 +18,7 @@ export type Database = {
           email: string
           id: string
           latitude: number | null
+          longitude: number | null
           name: string
           photo: string | null
           sweet_spot: string | null
@@ -30,6 +31,7 @@ export type Database = {
           email: string
           id?: string
           latitude?: number | null
+          longitude?: number | null
           name: string
           photo?: string | null
           sweet_spot?: string | null
@@ -42,6 +44,7 @@ export type Database = {
           email?: string
           id?: string
           latitude?: number | null
+          longitude?: number | null
           name?: string
           photo?: string | null
           sweet_spot?: string | null
@@ -85,10 +88,10 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+      Row: infer R
+    }
+    ? R
+    : never
     : never
 
 export type TablesInsert<
