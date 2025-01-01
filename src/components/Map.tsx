@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import AgentCard from './AgentCard';
 import SearchBar from './SearchBar';
 import MapContainer from './MapContainer';
+import AgentList from './AgentList';
 import { Agent } from '../types';
 import { supabase } from '@/integrations/supabase/client';
 import { geocodeLocation } from '../utils/geocoding';
@@ -21,11 +22,9 @@ const fetchAgents = async () => {
   
   console.log('Raw agents data:', data);
   
-  // Process each agent to ensure they have coordinates
   const processedAgents = await Promise.all((data || []).map(async (agent) => {
     let { latitude, longitude } = agent;
 
-    // If we don't have coordinates but have a location name, geocode it
     if ((!latitude || !longitude) && agent.area) {
       try {
         console.log(`Geocoding location for agent ${agent.name}: ${agent.area}`);
@@ -34,7 +33,6 @@ const fetchAgents = async () => {
         longitude = lng;
       } catch (error) {
         console.error(`Failed to geocode ${agent.area}:`, error);
-        // Use a default location in central London if geocoding fails
         latitude = 51.5074;
         longitude = -0.1278;
       }
@@ -43,7 +41,7 @@ const fetchAgents = async () => {
     return {
       ...agent,
       sweetSpot: agent.sweet_spot,
-      latitude: latitude || 51.5074, // Ensure we always have a fallback
+      latitude: latitude || 51.5074,
       longitude: longitude || -0.1278,
     } as Agent;
   }));
@@ -54,9 +52,28 @@ const fetchAgents = async () => {
 
 const Map = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
   const { data: agents, isLoading, error } = useQuery({
     queryKey: ['agents'],
     queryFn: fetchAgents,
+  });
+
+  const handleSearch = (location: { lat: number; lng: number }) => {
+    setSearchLocation(location);
+    setSelectedAgent(null);
+  };
+
+  const filteredAgents = agents?.filter(agent => {
+    if (!searchLocation) return false;
+    
+    // Calculate distance between agent and search location (simple approximation)
+    const distance = Math.sqrt(
+      Math.pow((agent.latitude - searchLocation.lat) * 111, 2) +
+      Math.pow((agent.longitude - searchLocation.lng) * 111, 2)
+    );
+    
+    // Show agents within approximately 5km of search location
+    return distance <= 5;
   });
 
   if (isLoading) {
@@ -81,9 +98,15 @@ const Map = () => {
       <MapContainer
         agents={agents}
         onSelectAgent={setSelectedAgent}
+        center={searchLocation}
       />
       <div className="relative z-10">
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} />
+        <AgentList
+          agents={filteredAgents || []}
+          onSelectAgent={setSelectedAgent}
+          visible={!!searchLocation}
+        />
         {selectedAgent && (
           <AgentCard
             agent={selectedAgent}
