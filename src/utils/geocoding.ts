@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 
 export const geocodeLocation = async (locationName: string): Promise<[number, number]> => {
   const baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
-  const accessToken = mapboxgl.accessToken;
+  const accessToken = 'pk.eyJ1IjoibnVsbWF0dCIsImEiOiJjbTVkcWRqMGwweDBnMmpyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw';
   
   // Clean and truncate the location name to avoid query length issues
   // Only take the first part before any comma or separator and limit to 100 chars
