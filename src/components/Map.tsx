@@ -90,12 +90,12 @@ const Map = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div ref={mapContainer} className="absolute inset-0 z-0" />
-      <div className="relative z-10">
+      <div ref={mapContainer} className="absolute inset-0 z-0 leaflet-container" />
+      <div className="absolute top-4 left-4 right-4 z-10">
         <SearchBar />
       </div>
       {selectedAgent && (
-        <div className="relative z-10">
+        <div className="absolute bottom-4 left-4 right-4 z-10">
           <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
         </div>
       )}

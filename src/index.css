@@ -44,6 +44,7 @@
     @apply bg-background text-foreground;
     margin: 0;
     padding: 0;
+    overflow: hidden;
   }
 }
 
@@ -68,4 +69,14 @@
   padding: 0;
   max-width: none;
   margin: 0;
+}
+
+/* Ensure proper z-indexing for map elements */
+.leaflet-pane {
+  z-index: 1;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2;
 }
