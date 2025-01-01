@@ -42,10 +42,14 @@ const Map = () => {
     // Initialize map
     map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 13);
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
+    // Add Mapbox tiles
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      id: 'mapbox/streets-v11',
+      accessToken: 'pk.eyJ1IjoibnVsbG1hdHQiLCJhIjoiY201ZHFkajBsd3gwbjJyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw',
+      tileSize: 512,
+      zoomOffset: -1,
+      maxZoom: 18
     }).addTo(map.current);
 
     // Custom icon for markers
