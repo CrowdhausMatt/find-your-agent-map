@@ -12,6 +12,8 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
   const markerRef = useRef<L.Marker | null>(null);
 
   useEffect(() => {
+    if (!map) return;
+
     const customIcon = L.divIcon({
       className: 'agent-marker',
       html: `
@@ -26,14 +28,21 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
       iconAnchor: [16, 32],
     });
 
+    // Remove existing marker if it exists
+    if (markerRef.current) {
+      markerRef.current.remove();
+    }
+
+    // Create and add new marker
     markerRef.current = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
       .addTo(map)
       .on('click', () => onSelect(agent));
 
-    // Cleanup function to remove marker when component unmounts
+    // Cleanup function
     return () => {
       if (markerRef.current) {
         markerRef.current.remove();
+        markerRef.current = null;
       }
     };
   }, [agent, map, onSelect]);

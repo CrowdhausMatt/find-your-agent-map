@@ -11,7 +11,6 @@ interface MapContainerProps {
 const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
-  const markers = useRef<L.Marker[]>([]);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -27,20 +26,20 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
 
     // Cleanup function
     return () => {
-      markers.current.forEach(marker => marker.remove());
-      map.current?.remove();
-      map.current = null;
-      markers.current = [];
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
   }, []);
 
   return (
-    <div ref={mapContainer} className="absolute inset-0">
+    <div ref={mapContainer} className="absolute inset-0 z-0">
       {map.current && agents.map(agent => (
         <AgentMarker
           key={agent.id}
           agent={agent}
-          map={map.current}
+          map={map.current!}
           onSelect={onSelectAgent}
         />
       ))}
