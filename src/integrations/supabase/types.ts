@@ -18,6 +18,7 @@ export type Database = {
           email: string
           id: string
           latitude: number | null
+          longitude: number | null
           name: string
           photo: string | null
           sweet_spot: string | null
@@ -30,6 +31,7 @@ export type Database = {
           email: string
           id?: string
           latitude?: number | null
+          longitude?: number | null
           name: string
           photo?: string | null
           sweet_spot?: string | null
@@ -42,6 +44,7 @@ export type Database = {
           email?: string
           id?: string
           latitude?: number | null
+          longitude?: number | null
           name?: string
           photo?: string | null
           sweet_spot?: string | null
