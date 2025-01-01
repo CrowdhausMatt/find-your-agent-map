@@ -37,50 +37,41 @@ const Map = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current || map.current) return;
 
-    // Initialize map only if it hasn't been initialized
-    if (!map.current) {
-      map.current = L.map(mapContainer.current, {
-        center: [51.5074, -0.1278],
-        zoom: 13
-      });
+    // Initialize map
+    map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 13);
 
-      // Add Mapbox tiles
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        id: 'mapbox/streets-v11',
-        accessToken: 'pk.eyJ1IjoibnVsbG1hdHQiLCJhIjoiY201ZHFkajBsd3gwbjJyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw',
-        tileSize: 512,
-        zoomOffset: -1,
-        maxZoom: 18
-      }).addTo(map.current);
+    // Add OpenStreetMap tiles (free and no token required)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map.current);
 
-      // Custom icon for markers
-      const customIcon = L.divIcon({
-        className: 'agent-marker',
-        html: `
-          <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white 
-                      transform transition-transform hover:scale-110 cursor-pointer shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-          </div>
-        `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-      });
+    // Custom icon for markers
+    const customIcon = L.divIcon({
+      className: 'agent-marker',
+      html: `
+        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white 
+                    transform transition-transform hover:scale-110 cursor-pointer shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+        </div>
+      `,
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    });
 
-      // Add markers for each agent
-      DUMMY_AGENTS.forEach((agent) => {
-        const marker = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
-          .addTo(map.current!)
-          .on('click', () => {
-            setSelectedAgent(agent);
-          });
-        markers.current.push(marker);
-      });
-    }
+    // Add markers for each agent
+    DUMMY_AGENTS.forEach((agent) => {
+      const marker = L.marker([agent.latitude, agent.longitude], { icon: customIcon })
+        .addTo(map.current!)
+        .on('click', () => {
+          setSelectedAgent(agent);
+        });
+      markers.current.push(marker);
+    });
 
     // Cleanup function
     return () => {
@@ -94,7 +85,7 @@ const Map = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div ref={mapContainer} className="absolute inset-0 z-0" />
+      <div ref={mapContainer} className="absolute inset-0" />
       <div className="relative z-10">
         <SearchBar />
         {selectedAgent && (
