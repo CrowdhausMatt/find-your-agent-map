@@ -37,10 +37,21 @@ const Map = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    if (!mapContainer.current) return;
+
+    // Clean up existing map instance if it exists
+    if (map.current) {
+      map.current.remove();
+      map.current = null;
+      markers.current = [];
+    }
 
     // Initialize map
-    map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 13);
+    map.current = L.map(mapContainer.current, {
+      center: [51.5074, -0.1278],
+      zoom: 13,
+      zoomControl: true
+    });
 
     // Add Mapbox tiles
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -89,11 +100,13 @@ const Map = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div ref={mapContainer} className="absolute inset-0" />
-      <SearchBar />
-      {selectedAgent && (
-        <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
-      )}
+      <div ref={mapContainer} className="absolute inset-0 z-0" />
+      <div className="relative z-10">
+        <SearchBar />
+        {selectedAgent && (
+          <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
+        )}
+      </div>
     </div>
   );
 };
