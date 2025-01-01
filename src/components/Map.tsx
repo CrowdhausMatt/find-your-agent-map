@@ -64,43 +64,30 @@ const Map = () => {
   };
 
   const filteredAgents = agents?.filter(agent => {
-    if (!searchLocation) return true; // Show all agents when no search is performed
+    if (!searchLocation) return true;
     
-    // Calculate distance between agent and search location (simple approximation)
     const distance = Math.sqrt(
       Math.pow((agent.latitude - searchLocation.lat) * 111, 2) +
       Math.pow((agent.longitude - searchLocation.lng) * 111, 2)
     );
     
-    // Show agents within approximately 1km of search location
     return distance <= 1;
   });
 
-  if (isLoading) {
-    console.log('Loading agents...');
-    return <div className="w-full h-screen flex items-center justify-center">Loading agents...</div>;
-  }
-
-  if (error) {
-    console.error('Error loading agents:', error);
-    return <div className="w-full h-screen flex items-center justify-center">Error loading agents</div>;
-  }
-
-  if (!agents || agents.length === 0) {
-    console.log('No agents found');
-    return <div className="w-full h-screen flex items-center justify-center">No agents found</div>;
-  }
-
-  console.log('Rendering map with agents:', agents);
+  if (isLoading) return <div className="w-full h-screen flex items-center justify-center">Loading agents...</div>;
+  if (error) return <div className="w-full h-screen flex items-center justify-center">Error loading agents</div>;
+  if (!agents || agents.length === 0) return <div className="w-full h-screen flex items-center justify-center">No agents found</div>;
 
   return (
     <div className="relative w-full h-screen">
-      <MapContainer
-        agents={filteredAgents}
-        onSelectAgent={setSelectedAgent}
-        center={searchLocation}
-      />
-      <div className="relative z-10">
+      <div className="absolute inset-0">
+        <MapContainer
+          agents={filteredAgents}
+          onSelectAgent={setSelectedAgent}
+          center={searchLocation}
+        />
+      </div>
+      <div className="relative z-20">
         <SearchBar onSearch={handleSearch} />
         <AgentList
           agents={filteredAgents || []}

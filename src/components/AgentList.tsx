@@ -12,7 +12,7 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
   if (!visible) return null;
 
   return (
-    <div className="absolute left-0 right-0 bottom-0 h-1/4 bg-white shadow-xl overflow-hidden z-10">
+    <div className="absolute left-0 right-0 bottom-0 h-1/4 bg-white shadow-xl overflow-hidden z-50">
       <div className="p-4 border-b">
         <h2 className="text-lg font-semibold">Agents in this area</h2>
         <p className="text-sm text-gray-500">{agents.length} agents found</p>
