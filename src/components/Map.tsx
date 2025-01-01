@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import MapContainer from './MapContainer';
 import { Agent } from '../types';
 import { supabase } from '@/integrations/supabase/client';
+import { geocodeLocation } from '../utils/geocoding';
 
 const fetchAgents = async () => {
   const { data, error } = await supabase
@@ -14,11 +15,32 @@ const fetchAgents = async () => {
   
   if (error) throw error;
   
-  // Map the database fields to our frontend model
-  return (data || []).map(agent => ({
-    ...agent,
-    sweetSpot: agent.sweet_spot, // Map sweet_spot to sweetSpot
-  })) as Agent[];
+  // Process each agent to ensure they have coordinates
+  const processedAgents = await Promise.all((data || []).map(async (agent) => {
+    let latitude = agent.latitude;
+    let longitude = agent.longitude;
+
+    // If we don't have coordinates but have a location name, geocode it
+    if ((!latitude || !longitude) && agent.area) {
+      try {
+        [latitude, longitude] = await geocodeLocation(agent.area);
+      } catch (error) {
+        console.error(`Failed to geocode ${agent.area}:`, error);
+        // Use a default location in central London if geocoding fails
+        latitude = 51.5074;
+        longitude = -0.1278;
+      }
+    }
+
+    return {
+      ...agent,
+      sweetSpot: agent.sweet_spot,
+      latitude,
+      longitude,
+    } as Agent;
+  }));
+
+  return processedAgents;
 };
 
 const Map = () => {
