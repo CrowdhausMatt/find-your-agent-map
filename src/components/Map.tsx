@@ -17,13 +17,14 @@ const fetchAgents = async () => {
   
   // Process each agent to ensure they have coordinates
   const processedAgents = await Promise.all((data || []).map(async (agent) => {
-    let latitude = agent.latitude;
-    let longitude = agent.longitude;
+    let { latitude, longitude } = agent;
 
     // If we don't have coordinates but have a location name, geocode it
     if ((!latitude || !longitude) && agent.area) {
       try {
-        [latitude, longitude] = await geocodeLocation(agent.area);
+        const [lat, lng] = await geocodeLocation(agent.area);
+        latitude = lat;
+        longitude = lng;
       } catch (error) {
         console.error(`Failed to geocode ${agent.area}:`, error);
         // Use a default location in central London if geocoding fails
