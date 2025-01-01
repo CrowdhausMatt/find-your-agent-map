@@ -4,9 +4,12 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
   const baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
   const accessToken = mapboxgl.accessToken;
   
-  // Only search for the area name within London to get more accurate results
-  // and keep the query string shorter
-  const searchQuery = `${locationName}, London`;
+  // Clean and truncate the location name to avoid query length issues
+  // Only take the first part before any comma or separator
+  const cleanedLocation = locationName.split(/[,|&]/)[0].trim();
+  
+  // Add London context but keep query short
+  const searchQuery = `${cleanedLocation}, London`;
   
   try {
     const response = await fetch(
@@ -20,13 +23,13 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
     const data = await response.json();
     
     if (!data.features || data.features.length === 0) {
-      throw new Error(`Location "${locationName}" not found`);
+      throw new Error(`Location "${cleanedLocation}" not found`);
     }
     
     const [longitude, latitude] = data.features[0].center;
     return [latitude, longitude];
   } catch (error) {
-    console.error(`Error geocoding ${locationName}:`, error);
+    console.error(`Error geocoding ${cleanedLocation}:`, error);
     // Return coordinates for central London as fallback
     return [51.5074, -0.1278];
   }

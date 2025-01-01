@@ -36,8 +36,8 @@ const fetchAgents = async () => {
     return {
       ...agent,
       sweetSpot: agent.sweet_spot,
-      latitude,
-      longitude,
+      latitude: latitude || 51.5074, // Ensure we always have a fallback
+      longitude: longitude || -0.1278,
     } as Agent;
   }));
 
