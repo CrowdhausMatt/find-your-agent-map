@@ -48,7 +48,7 @@ const fetchAgents = async () => {
   return processedAgents;
 };
 
-const Map = () => {
+const MapComponent = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
@@ -62,15 +62,15 @@ const Map = () => {
 
   // Group agents by location
   const groupedAgents = useMemo(() => {
-    if (!agents) return new Map();
+    if (!agents) return new Map<string, Agent[]>();
     
-    const groups = new Map<string, Agent[]>();
+    const locationGroups = new Map<string, Agent[]>();
     agents.forEach(agent => {
       const key = `${agent.latitude},${agent.longitude}`;
-      const existing = groups.get(key) || [];
-      groups.set(key, [...existing, agent]);
+      const existing = locationGroups.get(key) || [];
+      locationGroups.set(key, [...existing, agent]);
     });
-    return groups;
+    return locationGroups;
   }, [agents]);
 
   const handleSearch = (location: { lat: number; lng: number }) => {
@@ -129,4 +129,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default MapComponent;
