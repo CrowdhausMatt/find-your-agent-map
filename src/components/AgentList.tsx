@@ -33,10 +33,10 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
               transition={{ duration: 0.2 }}
             >
               <Card
-                className="cursor-pointer hover:shadow-md transition-all duration-200 transform hover:-translate-y-1 bg-white/70 backdrop-blur-sm h-32 w-full"
+                className="cursor-pointer hover:shadow-md transition-all duration-200 transform hover:-translate-y-1 bg-white/70 backdrop-blur-sm h-40 w-full"
                 onClick={() => onSelectAgent(agent)}
               >
-                <div className="h-16 relative overflow-hidden rounded-t-lg">
+                <div className="h-24 relative overflow-hidden rounded-t-lg">
                   <img
                     src={agent.photo || '/placeholder.svg'}
                     alt={agent.name}
