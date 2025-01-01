@@ -1,6 +1,7 @@
 import React from 'react';
 import { Agent } from '../types';
 import { Card } from './ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface AgentListProps {
   agents: Agent[];
@@ -12,32 +13,43 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
   if (!visible) return null;
 
   return (
-    <div className="absolute left-0 right-0 bottom-0 h-1/4 bg-white shadow-xl overflow-hidden pointer-events-auto">
-      <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold">Nearby Agents</h2>
-        <p className="text-sm text-gray-500">{agents.length} agents found within 1km</p>
+    <div className="absolute left-0 right-0 bottom-0 h-72 bg-white/80 backdrop-blur-md shadow-xl overflow-hidden pointer-events-auto rounded-t-xl border-t border-gray-200">
+      <div className="p-2 border-b border-gray-200 flex items-center justify-between">
+        <div>
+          <h2 className="text-sm font-medium text-gray-900">Nearby Agents</h2>
+          <p className="text-xs text-gray-500">{agents.length} agents found within 1km</p>
+        </div>
+        <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto absolute top-2 left-1/2 transform -translate-x-1/2" />
       </div>
-      <div className="overflow-x-auto h-[calc(100%-5rem)] p-4">
-        <div className="flex space-x-4">
+      
+      <div className="overflow-y-auto h-[calc(100%-2.5rem)] p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {agents.map((agent) => (
-            <Card
+            <motion.div
               key={agent.id}
-              className="p-4 cursor-pointer hover:shadow-md transition-shadow flex-shrink-0 w-64"
-              onClick={() => onSelectAgent(agent)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
             >
-              <div className="flex flex-col space-y-2">
-                <img
-                  src={agent.photo || '/placeholder.svg'}
-                  alt={agent.name}
-                  className="w-full h-32 rounded-lg object-cover"
-                />
-                <div>
-                  <h3 className="font-medium">{agent.name}</h3>
-                  <p className="text-sm text-gray-500">{agent.agency}</p>
-                  <p className="text-sm text-gray-500">{agent.area}</p>
+              <Card
+                className="cursor-pointer hover:shadow-md transition-all duration-200 transform hover:-translate-y-1 bg-white/70 backdrop-blur-sm"
+                onClick={() => onSelectAgent(agent)}
+              >
+                <div className="aspect-square relative overflow-hidden rounded-t-lg">
+                  <img
+                    src={agent.photo || '/placeholder.svg'}
+                    alt={agent.name}
+                    className="object-cover w-full h-full"
+                  />
                 </div>
-              </div>
-            </Card>
+                <div className="p-3">
+                  <h3 className="font-medium text-sm truncate">{agent.name}</h3>
+                  <p className="text-xs text-gray-500 truncate">{agent.agency}</p>
+                  <p className="text-xs text-gray-500 truncate">{agent.area}</p>
+                </div>
+              </Card>
+            </motion.div>
           ))}
         </div>
       </div>
