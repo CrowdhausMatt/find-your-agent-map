@@ -40,7 +40,11 @@ const Map = () => {
     if (!mapContainer.current || map.current) return;
 
     // Initialize map
-    map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 12);
+    map.current = L.map(mapContainer.current, {
+      center: [51.5074, -0.1278],
+      zoom: 13,
+      zoomControl: true,
+    });
 
     // Add the fun, cartoon-style tiles
     L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png', {
@@ -86,10 +90,14 @@ const Map = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div ref={mapContainer} className="absolute inset-0" />
-      <SearchBar />
+      <div ref={mapContainer} className="absolute inset-0 z-0" />
+      <div className="relative z-10">
+        <SearchBar />
+      </div>
       {selectedAgent && (
-        <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
+        <div className="relative z-10">
+          <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
+        </div>
       )}
     </div>
   );
