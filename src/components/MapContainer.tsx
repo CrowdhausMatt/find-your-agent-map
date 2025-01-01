@@ -22,8 +22,7 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
       
       const mapInstance = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        projection: 'globe',
+        style: 'mapbox://styles/nulmatt/cm5e0vnpz004v01sc25uj12pv',
         zoom: 12,
         center: [-0.1278, 51.5074], // London coordinates
         pitch: 45,
@@ -40,13 +39,6 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
           }),
           'top-right'
         );
-
-        // Add atmosphere and fog effects
-        mapInstance.setFog({
-          color: 'rgb(255, 255, 255)',
-          'high-color': 'rgb(200, 200, 225)',
-          'horizon-blend': 0.2,
-        });
       });
 
     } catch (error) {
