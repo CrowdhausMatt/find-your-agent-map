@@ -16,8 +16,29 @@ const MapComponent = () => {
   
   const { agents, isLoading, error, groupedAgents } = useMapState();
 
-  // Always show all agents, filter only when there's a search
-  const displayedAgents = agents || [];
+  // Get nearby agents for the panel
+  const getNearbyAgents = (agents: Agent[], searchLocation: { lat: number; lng: number } | null) => {
+    if (!searchLocation || !agents) return [];
+    
+    return agents.filter(agent => {
+      if (!agent.latitude || !agent.longitude) return false;
+      
+      // Calculate distance in kilometers using the Haversine formula
+      const R = 6371; // Earth's radius in km
+      const dLat = (agent.latitude - searchLocation.lat) * Math.PI / 180;
+      const dLon = (agent.longitude - searchLocation.lng) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(searchLocation.lat * Math.PI / 180) * Math.cos(agent.latitude * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      
+      return distance <= 1; // Only return agents within 1km
+    });
+  };
+
+  const nearbyAgents = searchLocation ? getNearbyAgents(agents || [], searchLocation) : [];
 
   const handleSearch = (location: { lat: number; lng: number }) => {
     setSearchLocation(location);
@@ -53,7 +74,7 @@ const MapComponent = () => {
       <MapLayout
         searchLocation={searchLocation}
         onSearch={handleSearch}
-        nearbyAgents={displayedAgents}
+        nearbyAgents={nearbyAgents}
         selectedAgent={selectedAgent}
         onSelectAgent={setSelectedAgent}
         isPanelVisible={isPanelVisible}
