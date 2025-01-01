@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import L from 'leaflet';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { Agent } from '../types';
 import AgentMarker from './AgentMarker';
 
@@ -10,19 +11,39 @@ interface MapContainerProps {
 
 const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<L.Map | null>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
     // Initialize map
-    map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 13);
+    mapboxgl.accessToken = 'pk.eyJ1IjoibnVsbWF0dCIsImEiOiJjbTVkcWRqMGwweDBnMmpyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw';
+    
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/light-v11',
+      projection: 'globe',
+      zoom: 12,
+      center: [-0.1278, 51.5074], // London coordinates
+      pitch: 45,
+    });
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
-    }).addTo(map.current);
+    // Add navigation controls
+    map.current.addControl(
+      new mapboxgl.NavigationControl({
+        visualizePitch: true,
+      }),
+      'top-right'
+    );
+
+    // Add atmosphere and fog effects
+    map.current.on('style.load', () => {
+      map.current?.setFog({
+        color: 'rgb(255, 255, 255)',
+        'high-color': 'rgb(200, 200, 225)',
+        'horizon-blend': 0.2,
+      });
+    });
 
     // Cleanup function
     return () => {
@@ -39,7 +60,7 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
         <AgentMarker
           key={agent.id}
           agent={agent}
-          map={map.current!}
+          map={map.current}
           onSelect={onSelectAgent}
         />
       ))}
