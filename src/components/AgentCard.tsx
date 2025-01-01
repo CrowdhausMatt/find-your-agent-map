@@ -45,15 +45,15 @@ const AgentCard = ({ agent, onClose }: AgentCardProps) => {
           </div>
         </div>
         
-        <ScrollArea className="flex-1 mb-4">
-          <div className="space-y-2">
+        <ScrollArea className="flex-grow min-h-0">
+          <div className="space-y-2 pr-4">
             <p className="text-sm text-gray-600">{agent.about}</p>
             <p className="text-sm font-medium">Sweet Spot: {agent.sweetSpot}</p>
           </div>
         </ScrollArea>
         
         <Button
-          className="w-full mt-auto"
+          className="w-full mt-4"
           onClick={() => window.location.href = `mailto:${agent.email}`}
         >
           Contact Agent
