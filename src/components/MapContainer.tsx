@@ -17,6 +17,7 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
     if (!mapContainer.current || map.current) return;
 
     try {
+      console.log('Initializing map...');
       // Initialize map
       mapboxgl.accessToken = 'pk.eyJ1IjoibnVsbWF0dCIsImEiOiJjbTVkcWRqMGwweDBnMmpyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw';
       
@@ -29,6 +30,7 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
       });
 
       mapInstance.on('load', () => {
+        console.log('Map loaded successfully');
         // Set map reference only after it's fully loaded
         map.current = mapInstance;
 
@@ -54,16 +56,24 @@ const MapContainer = ({ agents, onSelectAgent }: MapContainerProps) => {
     };
   }, []);
 
+  // Log when agents prop changes
+  useEffect(() => {
+    console.log('Agents prop updated:', agents);
+  }, [agents]);
+
   return (
     <div ref={mapContainer} className="absolute inset-0 z-0">
-      {map.current && agents.map(agent => (
-        <AgentMarker
-          key={agent.id}
-          agent={agent}
-          map={map.current}
-          onSelect={onSelectAgent}
-        />
-      ))}
+      {map.current && agents && agents.map(agent => {
+        console.log('Rendering marker for agent:', agent);
+        return (
+          <AgentMarker
+            key={agent.id}
+            agent={agent}
+            map={map.current!}
+            onSelect={onSelectAgent}
+          />
+        );
+      })}
     </div>
   );
 };
