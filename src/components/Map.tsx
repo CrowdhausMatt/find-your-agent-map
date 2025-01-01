@@ -63,8 +63,9 @@ const Map = () => {
     setSelectedAgent(null);
   };
 
-  const filteredAgents = agents?.filter(agent => {
-    if (!searchLocation) return true;
+  // This will only filter agents for the list view, not the map
+  const nearbyAgents = agents?.filter(agent => {
+    if (!searchLocation) return false; // Only show list after search
     
     const distance = Math.sqrt(
       Math.pow((agent.latitude - searchLocation.lat) * 111, 2) +
@@ -82,23 +83,27 @@ const Map = () => {
     <div className="relative w-full h-screen">
       <div className="absolute inset-0">
         <MapContainer
-          agents={filteredAgents}
+          agents={agents} // Show all agents on map
           onSelectAgent={setSelectedAgent}
           center={searchLocation}
         />
       </div>
-      <div className="relative z-20">
-        <SearchBar onSearch={handleSearch} />
+      <div className="absolute inset-0 z-50 pointer-events-none">
+        <div className="pointer-events-auto">
+          <SearchBar onSearch={handleSearch} />
+        </div>
         <AgentList
-          agents={filteredAgents || []}
+          agents={nearbyAgents || []}
           onSelectAgent={setSelectedAgent}
           visible={!!searchLocation}
         />
         {selectedAgent && (
-          <AgentCard
-            agent={selectedAgent}
-            onClose={() => setSelectedAgent(null)}
-          />
+          <div className="pointer-events-auto">
+            <AgentCard
+              agent={selectedAgent}
+              onClose={() => setSelectedAgent(null)}
+            />
+          </div>
         )}
       </div>
     </div>

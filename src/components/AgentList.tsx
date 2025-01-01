@@ -12,10 +12,10 @@ const AgentList = ({ agents, onSelectAgent, visible }: AgentListProps) => {
   if (!visible) return null;
 
   return (
-    <div className="absolute left-0 right-0 bottom-0 h-1/4 bg-white shadow-xl overflow-hidden z-50">
+    <div className="absolute left-0 right-0 bottom-0 h-1/4 bg-white shadow-xl overflow-hidden pointer-events-auto">
       <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold">Agents in this area</h2>
-        <p className="text-sm text-gray-500">{agents.length} agents found</p>
+        <h2 className="text-lg font-semibold">Nearby Agents</h2>
+        <p className="text-sm text-gray-500">{agents.length} agents found within 1km</p>
       </div>
       <div className="overflow-x-auto h-[calc(100%-5rem)] p-4">
         <div className="flex space-x-4">
