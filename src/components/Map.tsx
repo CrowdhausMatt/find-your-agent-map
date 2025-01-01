@@ -40,18 +40,12 @@ const Map = () => {
     if (!mapContainer.current || map.current) return;
 
     // Initialize map
-    map.current = L.map(mapContainer.current, {
-      center: [51.5074, -0.1278],
-      zoom: 13,
-      zoomControl: true,
-    });
+    map.current = L.map(mapContainer.current).setView([51.5074, -0.1278], 13);
 
-    // Add the fun, cartoon-style tiles
-    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      subdomains: 'abcd',
-      minZoom: 0,
-      maxZoom: 20,
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
     }).addTo(map.current);
 
     // Custom icon for markers
@@ -59,7 +53,7 @@ const Map = () => {
       className: 'agent-marker',
       html: `
         <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white 
-                    transform transition-transform hover:scale-110 cursor-pointer">
+                    transform transition-transform hover:scale-110 cursor-pointer shadow-lg">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
           </svg>
@@ -79,6 +73,7 @@ const Map = () => {
       markers.current.push(marker);
     });
 
+    // Cleanup function
     return () => {
       if (map.current) {
         map.current.remove();
@@ -90,14 +85,10 @@ const Map = () => {
 
   return (
     <div className="relative w-full h-screen">
-      <div ref={mapContainer} className="absolute inset-0 z-0 leaflet-container" />
-      <div className="absolute top-4 left-4 right-4 z-10">
-        <SearchBar />
-      </div>
+      <div ref={mapContainer} className="absolute inset-0" />
+      <SearchBar />
       {selectedAgent && (
-        <div className="absolute bottom-4 left-4 right-4 z-10">
-          <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
-        </div>
+        <AgentCard agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
       )}
     </div>
   );
