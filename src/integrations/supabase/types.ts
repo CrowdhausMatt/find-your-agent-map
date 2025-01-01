@@ -13,10 +13,10 @@ export type Database = {
         Row: {
           about: string | null
           agency: string
+          area: string | null
           created_at: string
           email: string
           id: string
-          latitude: number
           longitude: number
           name: string
           photo: string | null
@@ -25,10 +25,10 @@ export type Database = {
         Insert: {
           about?: string | null
           agency: string
+          area?: string | null
           created_at?: string
           email: string
           id?: string
-          latitude: number
           longitude: number
           name: string
           photo?: string | null
@@ -37,10 +37,10 @@ export type Database = {
         Update: {
           about?: string | null
           agency?: string
+          area?: string | null
           created_at?: string
           email?: string
           id?: string
-          latitude?: number
           longitude?: number
           name?: string
           photo?: string | null
