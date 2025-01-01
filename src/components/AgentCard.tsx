@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Agent } from '../types';
+import { ScrollArea } from './ui/scroll-area';
 
 interface AgentCardProps {
   agent: Agent;
@@ -11,7 +12,7 @@ interface AgentCardProps {
 const AgentCard = ({ agent, onClose }: AgentCardProps) => {
   return (
     <div className="absolute right-4 top-20 w-80 z-20">
-      <Card className="p-4 shadow-xl">
+      <Card className="p-4 shadow-xl flex flex-col max-h-[80vh]">
         <button
           onClick={onClose}
           className="absolute right-2 top-2 text-gray-500 hover:text-gray-700"
@@ -44,13 +45,15 @@ const AgentCard = ({ agent, onClose }: AgentCardProps) => {
           </div>
         </div>
         
-        <div className="space-y-2 mb-4">
-          <p className="text-sm text-gray-600">{agent.about}</p>
-          <p className="text-sm font-medium">Sweet Spot: {agent.sweetSpot}</p>
-        </div>
+        <ScrollArea className="flex-1 mb-4">
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">{agent.about}</p>
+            <p className="text-sm font-medium">Sweet Spot: {agent.sweetSpot}</p>
+          </div>
+        </ScrollArea>
         
         <Button
-          className="w-full"
+          className="w-full mt-auto"
           onClick={() => window.location.href = `mailto:${agent.email}`}
         >
           Contact Agent
