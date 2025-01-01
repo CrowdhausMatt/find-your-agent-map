@@ -34,10 +34,10 @@ const AgentMarker = ({ agent, map, onSelect }: AgentMarkerProps) => {
         markerRef.current.remove();
       }
 
-      // Create and add new marker with trackPointer: false to prevent movement
+      // Create and add new marker with draggable: false to prevent movement
       markerRef.current = new mapboxgl.Marker({
         element: el,
-        trackPointer: false
+        draggable: false
       })
         .setLngLat([agent.longitude, agent.latitude])
         .addTo(map);
