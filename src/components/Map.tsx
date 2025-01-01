@@ -107,7 +107,7 @@ const MapComponent = () => {
       <MapLayout
         searchLocation={searchLocation}
         onSearch={handleSearch}
-        nearbyAgents={nearbyAgents || []}
+        nearbyAgents={agents}
         selectedAgent={selectedAgent}
         onSelectAgent={setSelectedAgent}
         isPanelVisible={isPanelVisible}
@@ -117,7 +117,7 @@ const MapComponent = () => {
         href="https://knokknok.social/"
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute top-4 right-4 z-50 w-24 h-auto hover:opacity-80 transition-opacity"
+        className="absolute top-4 left-4 z-50 w-24 h-auto hover:opacity-80 transition-opacity"
       >
         <img
           src="/lovable-uploads/b050625e-3d9e-4034-98dd-18b568b1327e.png"
