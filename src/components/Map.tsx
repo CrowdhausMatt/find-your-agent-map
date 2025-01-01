@@ -13,7 +13,12 @@ const fetchAgents = async () => {
     .select('*');
   
   if (error) throw error;
-  return data as Agent[];
+  
+  // Map the database fields to our frontend model
+  return (data || []).map(agent => ({
+    ...agent,
+    sweetSpot: agent.sweet_spot, // Map sweet_spot to sweetSpot
+  })) as Agent[];
 };
 
 const Map = () => {
