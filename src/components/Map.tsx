@@ -64,7 +64,7 @@ const Map = () => {
   };
 
   const filteredAgents = agents?.filter(agent => {
-    if (!searchLocation) return false;
+    if (!searchLocation) return true; // Show all agents when no search is performed
     
     // Calculate distance between agent and search location (simple approximation)
     const distance = Math.sqrt(
@@ -72,8 +72,8 @@ const Map = () => {
       Math.pow((agent.longitude - searchLocation.lng) * 111, 2)
     );
     
-    // Show agents within approximately 5km of search location
-    return distance <= 5;
+    // Show agents within approximately 1km of search location
+    return distance <= 1;
   });
 
   if (isLoading) {
@@ -96,7 +96,7 @@ const Map = () => {
   return (
     <div className="relative w-full h-screen">
       <MapContainer
-        agents={agents}
+        agents={filteredAgents}
         onSelectAgent={setSelectedAgent}
         center={searchLocation}
       />
