@@ -129,7 +129,7 @@ const Register = () => {
 
             <div>
               <Input
-                placeholder="Sweet spot (e.g., '2 bed flats in Hackney')"
+                placeholder="Sweet spot (e.g., '£750,000 - £1,500,000')"
                 {...register('sweetSpot', { required: 'Sweet spot is required' })}
               />
               {errors.sweetSpot && (
