@@ -5,9 +5,12 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
   const accessToken = 'pk.eyJ1IjoibnVsbWF0dCIsImEiOiJjbTVkcWRqMGwweDBnMmpyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw';
   
   try {
-    console.log(`Geocoding location: ${locationName}`);
+    // Split the location string by commas and take the first location
+    const primaryLocation = locationName.split(',')[0].trim();
+    
+    console.log(`Geocoding primary location: ${primaryLocation}`);
     const response = await fetch(
-      `${baseUrl}/${encodeURIComponent(locationName)}.json?access_token=${accessToken}&limit=1&country=GB&types=place,district,region,locality,neighborhood&language=en`
+      `${baseUrl}/${encodeURIComponent(primaryLocation)}.json?access_token=${accessToken}&limit=1&country=GB&types=place,district,region,locality,neighborhood&language=en`
     );
     
     if (!response.ok) {
@@ -17,15 +20,15 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
     const data = await response.json();
     
     if (!data.features || data.features.length === 0) {
-      console.error(`Location "${locationName}" not found`);
-      throw new Error(`Location "${locationName}" not found`);
+      console.error(`Location "${primaryLocation}" not found`);
+      throw new Error(`Location "${primaryLocation}" not found`);
     }
     
     const [longitude, latitude] = data.features[0].center;
-    console.log(`Geocoded ${locationName} to:`, { latitude, longitude });
+    console.log(`Geocoded ${primaryLocation} to:`, { latitude, longitude });
     return [latitude, longitude];
   } catch (error) {
-    console.error(`Error geocoding ${locationName}:`, error);
+    console.error(`Error geocoding location:`, error);
     throw error;
   }
 };
