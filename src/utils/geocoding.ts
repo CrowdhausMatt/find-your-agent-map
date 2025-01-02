@@ -4,14 +4,18 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
   const baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
   const accessToken = 'pk.eyJ1IjoibnVsbWF0dCIsImEiOiJjbTVkcWRqMGwweDBnMmpyMzB2N210ZzloIn0.TE1FzZdU3IsNQtSsbyhyJw';
   
-  // Clean and truncate the location name to avoid query length issues
-  // Only take the first part before any comma or separator and limit to 100 chars
-  const cleanedLocation = locationName.split(/[,|&]/)[0].trim().substring(0, 100);
-  
-  // Add London context but keep query short
-  const searchQuery = `${cleanedLocation}, London, UK`;
+  // Add UK context if not already present
+  const searchQuery = locationName.toLowerCase().includes('uk') || 
+                     locationName.toLowerCase().includes('united kingdom') || 
+                     locationName.toLowerCase().includes('england') || 
+                     locationName.toLowerCase().includes('scotland') || 
+                     locationName.toLowerCase().includes('wales') || 
+                     locationName.toLowerCase().includes('northern ireland')
+    ? locationName
+    : `${locationName}, UK`;
   
   try {
+    console.log(`Geocoding location: ${searchQuery}`);
     const response = await fetch(
       `${baseUrl}/${encodeURIComponent(searchQuery)}.json?access_token=${accessToken}&limit=1&country=GB`
     );
@@ -23,14 +27,15 @@ export const geocodeLocation = async (locationName: string): Promise<[number, nu
     const data = await response.json();
     
     if (!data.features || data.features.length === 0) {
-      throw new Error(`Location "${cleanedLocation}" not found`);
+      console.error(`Location "${searchQuery}" not found`);
+      throw new Error(`Location "${searchQuery}" not found`);
     }
     
     const [longitude, latitude] = data.features[0].center;
+    console.log(`Geocoded ${searchQuery} to:`, { latitude, longitude });
     return [latitude, longitude];
   } catch (error) {
-    console.error(`Error geocoding ${cleanedLocation}:`, error);
-    // Return coordinates for central London as fallback
-    return [51.5074, -0.1278];
+    console.error(`Error geocoding ${searchQuery}:`, error);
+    throw error;
   }
 };
