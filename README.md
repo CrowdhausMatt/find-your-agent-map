@@ -4,6 +4,32 @@
 
 **URL**: https://lovable.dev/projects/11c2478d-7e08-4f50-815c-f0549d4ea37d
 
+## How to connect your domain
+
+Since you're using GoDaddy, follow these steps to connect your domain:
+
+1. Go to your GoDaddy DNS settings
+2. Add a CNAME record:
+   - Type: CNAME
+   - Host: @ (or subdomain like 'www')
+   - Points to: cname.vercel-dns.com
+   - TTL: 600 (or default)
+
+3. Deploy your site on Netlify:
+   ```sh
+   # Install Netlify CLI
+   npm install -g netlify-cli
+   
+   # Login to Netlify
+   netlify login
+   
+   # Initialize Netlify in your project
+   netlify init
+   
+   # Deploy
+   netlify deploy --prod
+   ```
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
@@ -24,10 +50,10 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/lovable-dev/11c2478d-7e08-4f50-815c-f0549d4ea37d.git
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd 11c2478d-7e08-4f50-815c-f0549d4ea37d
 
 # Step 3: Install the necessary dependencies.
 npm i
