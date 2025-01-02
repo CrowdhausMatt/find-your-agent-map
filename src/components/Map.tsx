@@ -12,6 +12,7 @@ const MapComponent = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const [displayedAgents, setDisplayedAgents] = useState<Agent[]>([]);
   const navigate = useNavigate();
   
   const { agents, isLoading, error, groupedAgents } = useMapState();
@@ -44,6 +45,7 @@ const MapComponent = () => {
     setSearchLocation(location);
     setSelectedAgent(null);
     setIsPanelVisible(true);
+    setDisplayedAgents(getNearbyAgents(agents || [], location));
   };
 
   const handleSelectAgent = (agent: Agent) => {
@@ -51,7 +53,9 @@ const MapComponent = () => {
     const agentsAtLocation = groupedAgents.get(key) || [];
     
     if (agentsAtLocation.length > 1) {
+      setDisplayedAgents(agentsAtLocation);
       setIsPanelVisible(true);
+      setSelectedAgent(null);
     } else {
       setSelectedAgent(agent);
     }
@@ -74,11 +78,14 @@ const MapComponent = () => {
       <MapLayout
         searchLocation={searchLocation}
         onSearch={handleSearch}
-        nearbyAgents={nearbyAgents}
+        nearbyAgents={displayedAgents.length > 0 ? displayedAgents : nearbyAgents}
         selectedAgent={selectedAgent}
         onSelectAgent={setSelectedAgent}
         isPanelVisible={isPanelVisible}
-        onClosePanel={() => setIsPanelVisible(false)}
+        onClosePanel={() => {
+          setIsPanelVisible(false);
+          setDisplayedAgents([]);
+        }}
       />
       <MapHeader />
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
