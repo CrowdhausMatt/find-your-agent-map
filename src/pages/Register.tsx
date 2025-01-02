@@ -148,6 +148,9 @@ const Register = () => {
             </div>
 
             <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Profile Image
+              </label>
               <Input
                 type="file"
                 accept="image/*"
