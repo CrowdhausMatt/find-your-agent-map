@@ -11,8 +11,6 @@ interface NominationFormData {
   name: string;
   agency: string;
   social_handle: string;
-  area: string;
-  about: string;
 }
 
 export function NominateAgentDialog() {
@@ -28,8 +26,6 @@ export function NominateAgentDialog() {
           agency: data.agency,
           instagram_handle: data.social_handle,
           email: `${data.social_handle}@placeholder.com`,
-          area: data.area,
-          about: data.about,
           is_rising_star: true // New nominations start as rising stars
         });
 
@@ -88,21 +84,6 @@ export function NominateAgentDialog() {
 
             <FormField
               control={form.control}
-              name="area"
-              rules={{ required: "Area is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Area</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter area (e.g., Mayfair, Chelsea)" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="social_handle"
               rules={{ required: "Social media handle is required" }}
               render={({ field }) => (
@@ -110,21 +91,6 @@ export function NominateAgentDialog() {
                   <FormLabel>Instagram Handle</FormLabel>
                   <FormControl>
                     <Input placeholder="@handle" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="about"
-              rules={{ required: "Brief description is required" }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>About</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Brief description of the agent" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
