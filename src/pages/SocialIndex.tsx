@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Agent } from "@/types";
-import { Instagram } from "lucide-react";
+import AgentSocialCard from "@/components/AgentSocialCard";
 
 const SocialIndex = () => {
   const socialLeaders: Agent[] = [
@@ -119,35 +119,7 @@ const SocialIndex = () => {
             <TabsContent value="leaders">
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {socialLeaders.map((agent) => (
-                  <motion.div
-                    key={agent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    <div className="mb-4 aspect-square overflow-hidden rounded-lg">
-                      <img
-                        src={agent.photo || "/placeholder.svg"}
-                        alt={agent.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <h3 className="mb-2 text-xl font-semibold">{agent.name}</h3>
-                    <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
-                    <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
-                    <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
-                    {agent.instagram_handle && (
-                      <Button
-                        onClick={() => handleInstagramClick(agent.instagram_handle!)}
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2"
-                      >
-                        <Instagram className="h-4 w-4" />
-                        <span>@{agent.instagram_handle}</span>
-                      </Button>
-                    )}
-                  </motion.div>
+                  <AgentSocialCard key={agent.id} agent={agent} />
                 ))}
               </div>
             </TabsContent>
@@ -155,35 +127,7 @@ const SocialIndex = () => {
             <TabsContent value="rising">
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {risingStars.map((agent) => (
-                  <motion.div
-                    key={agent.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    <div className="mb-4 aspect-square overflow-hidden rounded-lg">
-                      <img
-                        src={agent.photo || "/placeholder.svg"}
-                        alt={agent.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <h3 className="mb-2 text-xl font-semibold">{agent.name}</h3>
-                    <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
-                    <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
-                    <p className="text-sm text-gray-700">{agent.about}</p>
-                    {agent.instagram_handle && (
-                      <Button
-                        onClick={() => handleInstagramClick(agent.instagram_handle!)}
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2"
-                      >
-                        <Instagram className="h-4 w-4" />
-                        <span>@{agent.instagram_handle}</span>
-                      </Button>
-                    )}
-                  </motion.div>
+                  <AgentSocialCard key={agent.id} agent={agent} />
                 ))}
               </div>
             </TabsContent>

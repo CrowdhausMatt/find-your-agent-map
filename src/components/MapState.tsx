@@ -1,72 +1,37 @@
-import { Agent } from '@/types';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { geocodeLocation } from '../utils/geocoding';
-import { useMemo } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { Agent } from '../types';
 
-const fetchAgents = async () => {
-  console.log('Fetching agents...');
-  const { data, error } = await supabase
-    .from('agents')
-    .select('*');
-  
-  if (error) {
-    console.error('Error fetching agents:', error);
-    throw error;
-  }
-  
-  console.log('Raw agents data:', data);
-  
-  const processedAgents = await Promise.all((data || []).map(async (agent) => {
-    let { latitude, longitude } = agent;
+interface MapState {
+  selectedAgent: Agent | null;
+  setSelectedAgent: (agent: Agent | null) => void;
+}
 
-    if ((!latitude || !longitude) && agent.area) {
-      try {
-        console.log(`Geocoding location for agent ${agent.name}: ${agent.area}`);
-        const [lat, lng] = await geocodeLocation(agent.area);
-        latitude = lat;
-        longitude = lng;
-      } catch (error) {
-        console.error(`Failed to geocode ${agent.area}:`, error);
-        latitude = 51.5074;
-        longitude = -0.1278;
-      }
-    }
+const MapStateContext = createContext<MapState | undefined>(undefined);
 
-    return {
-      ...agent,
-      sweetSpot: agent.sweet_spot,
-      latitude: latitude || 51.5074,
-      longitude: longitude || -0.1278,
-    } as Agent;
-  }));
+export const MapStateProvider = ({ children }: { children: React.ReactNode }) => {
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
-  console.log('Processed agents:', processedAgents);
-  return processedAgents;
+  return (
+    <MapStateContext.Provider value={{ selectedAgent, setSelectedAgent }}>
+      {children}
+    </MapStateContext.Provider>
+  );
 };
 
 export const useMapState = () => {
-  const { data: agents, isLoading, error } = useQuery({
-    queryKey: ['agents'],
-    queryFn: fetchAgents,
-  });
+  const context = useContext(MapStateContext);
+  if (context === undefined) {
+    throw new Error('useMapState must be used within a MapStateProvider');
+  }
+  return context;
+};
 
-  const groupedAgents = useMemo(() => {
-    if (!agents) return new Map<string, Agent[]>();
-    
-    const locationGroups = new Map<string, Agent[]>();
-    agents.forEach(agent => {
-      const key = `${agent.latitude},${agent.longitude}`;
-      const existing = locationGroups.get(key) || [];
-      locationGroups.set(key, [...existing, agent]);
-    });
-    return locationGroups;
-  }, [agents]);
-
+// Helper function to convert database agent to Agent type
+export const convertToAgent = (dbAgent: any): Agent => {
   return {
-    agents,
-    isLoading,
-    error,
-    groupedAgents
+    ...dbAgent,
+    instagram_handle: dbAgent.instagram_handle || null, // Add this line to handle the new field
   };
 };
+
+export default MapStateContext;
