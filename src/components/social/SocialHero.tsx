@@ -2,7 +2,7 @@ import { NominateAgentDialog } from "./NominateAgentDialog";
 
 export default function SocialHero() {
   return (
-    <section className="bg-[#9b87f5] py-12 sm:py-16 lg:py-20 xl:py-24">
+    <section className="bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] py-12 sm:py-16 lg:py-20 xl:py-24">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="space-y-2">
