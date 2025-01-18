@@ -25,7 +25,7 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
     >
       {ranking && (
         <Badge 
-          className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center bg-purple-600 border-2 border-white shadow-lg z-10"
+          className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center bg-[#9b87f5] border-2 border-white shadow-lg z-10"
           variant="default"
         >
           {ranking}
