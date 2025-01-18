@@ -1,19 +1,19 @@
-import React from 'react';
+import { Link } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 const MapHeader = () => {
   return (
-    <a
-      href="https://knokknok.social/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="absolute top-4 left-4 z-50 md:w-24 w-16 h-auto hover:opacity-80 transition-opacity md:top-4 top-16"
-    >
-      <img
-        src="/lovable-uploads/b050625e-3d9e-4034-98dd-18b568b1327e.png"
-        alt="Knok Knok"
-        className="w-full h-full object-contain"
-      />
-    </a>
+    <div className="absolute left-0 right-0 top-0 z-10 flex flex-col items-center gap-4 bg-white/80 p-4 backdrop-blur-sm">
+      <div className="flex w-full max-w-3xl items-center gap-4">
+        <SearchBar />
+        <Link
+          to="/social-index"
+          className="whitespace-nowrap rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700"
+        >
+          Social Index
+        </Link>
+      </div>
+    </div>
   );
 };
 
