@@ -29,7 +29,22 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
 
         if (supabaseError) throw supabaseError;
 
-        const agentData = data as Agent[];
+        // Convert database response to Agent type
+        const agentData = data.map((dbAgent: any): Agent => ({
+          id: dbAgent.id,
+          name: dbAgent.name,
+          agency: dbAgent.agency,
+          email: dbAgent.email,
+          about: dbAgent.about,
+          sweetSpot: dbAgent.sweet_spot,  // Map sweet_spot to sweetSpot
+          area: dbAgent.area,
+          latitude: dbAgent.latitude,
+          longitude: dbAgent.longitude,
+          photo: dbAgent.photo,
+          instagram_handle: dbAgent.instagram_handle || null,
+          created_at: dbAgent.created_at
+        }));
+
         setAgents(agentData);
 
         // Group agents by location
@@ -80,8 +95,18 @@ export const useMapState = () => {
 // Helper function to convert database agent to Agent type
 export const convertToAgent = (dbAgent: any): Agent => {
   return {
-    ...dbAgent,
+    id: dbAgent.id,
+    name: dbAgent.name,
+    agency: dbAgent.agency,
+    email: dbAgent.email,
+    about: dbAgent.about,
+    sweetSpot: dbAgent.sweet_spot,  // Map sweet_spot to sweetSpot
+    area: dbAgent.area,
+    latitude: dbAgent.latitude,
+    longitude: dbAgent.longitude,
+    photo: dbAgent.photo,
     instagram_handle: dbAgent.instagram_handle || null,
+    created_at: dbAgent.created_at
   };
 };
 
