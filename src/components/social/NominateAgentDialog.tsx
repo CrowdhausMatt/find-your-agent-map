@@ -11,6 +11,8 @@ interface NominationFormData {
   name: string;
   agency: string;
   social_handle: string;
+  area: string;
+  about: string;
 }
 
 export function NominateAgentDialog() {
@@ -20,12 +22,15 @@ export function NominateAgentDialog() {
   const onSubmit = async (data: NominationFormData) => {
     try {
       const { error } = await supabase
-        .from('agents')
+        .from('social_agents')
         .insert({
           name: data.name,
           agency: data.agency,
           instagram_handle: data.social_handle,
-          email: `${data.social_handle}@placeholder.com`, // Adding required email field
+          email: `${data.social_handle}@placeholder.com`,
+          area: data.area,
+          about: data.about,
+          is_rising_star: true // New nominations start as rising stars
         });
 
       if (error) throw error;
@@ -83,13 +88,43 @@ export function NominateAgentDialog() {
 
             <FormField
               control={form.control}
+              name="area"
+              rules={{ required: "Area is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Area</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter area (e.g., Mayfair, Chelsea)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="social_handle"
               rules={{ required: "Social media handle is required" }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Instagram/TikTok Handle</FormLabel>
+                  <FormLabel>Instagram Handle</FormLabel>
                   <FormControl>
                     <Input placeholder="@handle" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="about"
+              rules={{ required: "Brief description is required" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>About</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Brief description of the agent" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

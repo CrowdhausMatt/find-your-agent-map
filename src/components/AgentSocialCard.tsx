@@ -4,10 +4,10 @@ import { Instagram } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
-import { Agent } from '@/types';
+import { SocialAgent } from '@/types';
 
 interface AgentSocialCardProps {
-  agent: Agent;
+  agent: SocialAgent;
   ranking?: number;
 }
 
@@ -58,7 +58,7 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <img
-                  src={agent.photo}
+                  src={agent.photo || "/placeholder.svg"}
                   alt={agent.name}
                   className="h-10 w-10 rounded-full"
                 />

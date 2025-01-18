@@ -54,6 +54,57 @@ export type Database = {
         }
         Relationships: []
       }
+      social_agents: {
+        Row: {
+          about: string | null
+          agency: string
+          area: string | null
+          email: string
+          engagement_rate: number | null
+          follower_count: number | null
+          id: string
+          instagram_handle: string | null
+          is_leader: boolean | null
+          is_rising_star: boolean | null
+          name: string
+          nomination_date: string | null
+          photo: string | null
+          tiktok_handle: string | null
+        }
+        Insert: {
+          about?: string | null
+          agency: string
+          area?: string | null
+          email: string
+          engagement_rate?: number | null
+          follower_count?: number | null
+          id?: string
+          instagram_handle?: string | null
+          is_leader?: boolean | null
+          is_rising_star?: boolean | null
+          name: string
+          nomination_date?: string | null
+          photo?: string | null
+          tiktok_handle?: string | null
+        }
+        Update: {
+          about?: string | null
+          agency?: string
+          area?: string | null
+          email?: string
+          engagement_rate?: number | null
+          follower_count?: number | null
+          id?: string
+          instagram_handle?: string | null
+          is_leader?: boolean | null
+          is_rising_star?: boolean | null
+          name?: string
+          nomination_date?: string | null
+          photo?: string | null
+          tiktok_handle?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
