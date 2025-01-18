@@ -71,7 +71,7 @@ const SocialIndex = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white overflow-y-auto">
+    <div className="min-h-screen bg-white overflow-y-auto h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-purple-600 to-blue-500 py-20 text-white">
         <div className="container mx-auto px-4">
