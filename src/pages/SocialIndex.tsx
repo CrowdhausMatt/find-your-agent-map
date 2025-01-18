@@ -76,10 +76,6 @@ const SocialIndex = () => {
     }
   ];
 
-  const handleInstagramClick = (handle: string) => {
-    window.open(`https://instagram.com/${handle}`, '_blank');
-  };
-
   return (
     <div className="min-h-screen bg-white overflow-y-auto h-screen">
       {/* Hero Section */}
@@ -118,8 +114,12 @@ const SocialIndex = () => {
 
             <TabsContent value="leaders">
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {socialLeaders.map((agent) => (
-                  <AgentSocialCard key={agent.id} agent={agent} />
+                {socialLeaders.map((agent, index) => (
+                  <AgentSocialCard 
+                    key={agent.id} 
+                    agent={agent} 
+                    ranking={index + 1}
+                  />
                 ))}
               </div>
             </TabsContent>

@@ -2,14 +2,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Instagram } from 'lucide-react';
 import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 import { Agent } from '@/types';
 
 interface AgentSocialCardProps {
   agent: Agent;
+  ranking?: number;
 }
 
-const AgentSocialCard = ({ agent }: AgentSocialCardProps) => {
+const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
   };
@@ -19,8 +21,16 @@ const AgentSocialCard = ({ agent }: AgentSocialCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow"
+      className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative"
     >
+      {ranking && (
+        <Badge 
+          className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center bg-purple-600 border-2 border-white shadow-lg z-10"
+          variant="default"
+        >
+          {ranking}
+        </Badge>
+      )}
       <div className="mb-4 aspect-square overflow-hidden rounded-lg">
         <img
           src={agent.photo || "/placeholder.svg"}
