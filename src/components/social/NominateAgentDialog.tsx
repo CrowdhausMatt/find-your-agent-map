@@ -25,6 +25,7 @@ export function NominateAgentDialog() {
           name: data.name,
           agency: data.agency,
           instagram_handle: data.social_handle,
+          email: `${data.social_handle}@placeholder.com`, // Adding required email field
         });
 
       if (error) throw error;

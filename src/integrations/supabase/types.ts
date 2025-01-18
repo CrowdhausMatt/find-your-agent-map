@@ -17,6 +17,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          instagram_handle: string | null
           latitude: number | null
           longitude: number | null
           name: string
@@ -30,6 +31,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          instagram_handle?: string | null
           latitude?: number | null
           longitude?: number | null
           name: string
@@ -43,6 +45,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          instagram_handle?: string | null
           latitude?: number | null
           longitude?: number | null
           name?: string
