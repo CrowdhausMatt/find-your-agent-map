@@ -9,7 +9,7 @@ const MapHeader = () => {
   };
 
   return (
-    <div className="absolute left-0 right-0 top-0 z-10 flex flex-col items-center gap-4 bg-white/80 p-4 backdrop-blur-sm">
+    <div className="absolute left-0 right-0 top-0 z-10 flex flex-col items-center gap-4 p-4">
       <div className="flex w-full max-w-3xl items-center gap-4">
         <SearchBar onSearch={handleSearch} />
         <Link
