@@ -9,5 +9,6 @@ export interface Agent {
   latitude: number | null;
   longitude: number | null;
   photo: string | null;
+  instagram_handle: string | null;
   created_at?: string;
 }

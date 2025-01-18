@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Agent } from "@/types";
+import { Instagram } from "lucide-react";
 
 const SocialIndex = () => {
   const socialLeaders: Agent[] = [
@@ -16,6 +17,7 @@ const SocialIndex = () => {
       latitude: 51.5074,
       longitude: -0.1278,
       photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2688&auto=format&fit=crop",
+      instagram_handle: "sarahjproperty"
     },
     {
       id: "2",
@@ -28,6 +30,7 @@ const SocialIndex = () => {
       latitude: 51.5229,
       longitude: -0.0777,
       photo: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2940&auto=format&fit=crop",
+      instagram_handle: "jameswilsonagent"
     },
     {
       id: "3",
@@ -40,6 +43,7 @@ const SocialIndex = () => {
       latitude: 51.4875,
       longitude: -0.1687,
       photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2561&auto=format&fit=crop",
+      instagram_handle: "emmathompsonproperties"
     }
   ];
 
@@ -55,6 +59,7 @@ const SocialIndex = () => {
       latitude: 51.5475,
       longitude: -0.0547,
       photo: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=2560&auto=format&fit=crop",
+      instagram_handle: "alexchenrealty"
     },
     {
       id: "5",
@@ -67,8 +72,13 @@ const SocialIndex = () => {
       latitude: 51.5049,
       longitude: -0.0037,
       photo: "https://images.unsplash.com/photo-1619343177062-b79c2b4c8516?q=80&w=2564&auto=format&fit=crop",
+      instagram_handle: "mayapatelurban"
     }
   ];
+
+  const handleInstagramClick = (handle: string) => {
+    window.open(`https://instagram.com/${handle}`, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-white overflow-y-auto h-screen">
@@ -126,7 +136,17 @@ const SocialIndex = () => {
                     <h3 className="mb-2 text-xl font-semibold">{agent.name}</h3>
                     <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
                     <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
-                    <p className="text-sm text-gray-700">{agent.about}</p>
+                    <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
+                    {agent.instagram_handle && (
+                      <Button
+                        onClick={() => handleInstagramClick(agent.instagram_handle!)}
+                        variant="outline"
+                        className="w-full flex items-center justify-center gap-2"
+                      >
+                        <Instagram className="h-4 w-4" />
+                        <span>@{agent.instagram_handle}</span>
+                      </Button>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -153,6 +173,16 @@ const SocialIndex = () => {
                     <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
                     <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
                     <p className="text-sm text-gray-700">{agent.about}</p>
+                    {agent.instagram_handle && (
+                      <Button
+                        onClick={() => handleInstagramClick(agent.instagram_handle!)}
+                        variant="outline"
+                        className="w-full flex items-center justify-center gap-2"
+                      >
+                        <Instagram className="h-4 w-4" />
+                        <span>@{agent.instagram_handle}</span>
+                      </Button>
+                    )}
                   </motion.div>
                 ))}
               </div>
