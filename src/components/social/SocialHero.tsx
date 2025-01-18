@@ -1,32 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { NominateAgentDialog } from "./NominateAgentDialog";
 
-const SocialHero = () => {
+export default function SocialHero() {
   return (
-    <section className="relative bg-gradient-to-r from-purple-600 to-blue-500 py-20 text-white">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">
-            KnokKnok Social Property Agent Index
-          </h1>
-          <p className="mb-8 text-xl opacity-90">
-            Celebrating the Game-Changers in Real Estate
-          </p>
-          <Button
-            size="lg"
-            className="bg-white text-purple-600 hover:bg-gray-100"
-          >
-            Nominate an Agent
-          </Button>
-        </motion.div>
+    <section className="bg-white py-12 sm:py-16 lg:py-20 xl:py-24">
+      <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center space-y-4 text-center">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+              Social Property Leaders
+            </h1>
+            <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+              Discover the most influential property agents on social media. These agents are changing the game with their innovative approach to real estate.
+            </p>
+          </div>
+          <NominateAgentDialog />
+        </div>
       </div>
     </section>
   );
-};
-
-export default SocialHero;
+}
