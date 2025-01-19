@@ -28,4 +28,6 @@ export interface SocialAgent {
   engagement_rate: number;
   is_rising_star: boolean;
   is_leader: boolean;
+  rating?: number;
+  isTopEngagement?: boolean;
 }

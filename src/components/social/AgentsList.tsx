@@ -16,10 +16,31 @@ const AgentsList = () => {
         const { data: leaders, error: leadersError } = await supabase
           .from('social_agents')
           .select('*')
-          .eq('is_leader', true)
-          .order('follower_count', { ascending: false });
+          .eq('is_leader', true);
 
         if (leadersError) throw leadersError;
+
+        // Calculate rating and sort leaders
+        const leadersWithRating = leaders?.map(leader => ({
+          ...leader,
+          rating: (leader.follower_count * Number(leader.engagement_rate)) / 100
+        })) || [];
+
+        // Sort by rating
+        const sortedLeaders = leadersWithRating.sort((a, b) => b.rating - a.rating);
+
+        // Find top 5 engagement rates
+        const topEngagementAgents = new Set(
+          [...leaders || []].sort((a, b) => Number(b.engagement_rate) - Number(a.engagement_rate))
+            .slice(0, 5)
+            .map(agent => agent.id)
+        );
+
+        // Add isTopEngagement flag
+        const finalLeaders = sortedLeaders.map(leader => ({
+          ...leader,
+          isTopEngagement: topEngagementAgents.has(leader.id)
+        }));
 
         // Fetch rising stars
         const { data: rising, error: risingError } = await supabase
@@ -30,7 +51,7 @@ const AgentsList = () => {
 
         if (risingError) throw risingError;
 
-        setSocialLeaders(leaders || []);
+        setSocialLeaders(finalLeaders);
         setRisingStars(rising || []);
       } catch (error) {
         console.error('Error fetching agents:', error);

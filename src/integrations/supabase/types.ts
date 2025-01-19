@@ -58,6 +58,7 @@ export type Database = {
         Row: {
           about: string | null
           agency: string
+          area: string | null
           email: string
           engagement_rate: number | null
           follower_count: number | null
@@ -72,6 +73,7 @@ export type Database = {
         Insert: {
           about?: string | null
           agency: string
+          area?: string | null
           email: string
           engagement_rate?: number | null
           follower_count?: number | null
@@ -86,6 +88,7 @@ export type Database = {
         Update: {
           about?: string | null
           agency?: string
+          area?: string | null
           email?: string
           engagement_rate?: number | null
           follower_count?: number | null

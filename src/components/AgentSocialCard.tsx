@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram } from 'lucide-react';
+import { Instagram, Mail, Star } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 import { SocialAgent } from '@/types';
 
 interface AgentSocialCardProps {
@@ -14,6 +13,10 @@ interface AgentSocialCardProps {
 const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
+  };
+
+  const handleContactClick = (email: string) => {
+    window.location.href = `mailto:${email}`;
   };
 
   return (
@@ -31,6 +34,14 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
           {ranking}
         </Badge>
       )}
+      {agent.isTopEngagement && (
+        <Badge 
+          className="absolute -top-3 -right-3 px-2 py-1 flex items-center gap-1 bg-yellow-400 text-yellow-900 border-2 border-white shadow-lg z-10"
+          variant="default"
+        >
+          <Star className="w-3 h-3" /> Top Engagement
+        </Badge>
+      )}
       <div className="mb-4 aspect-square overflow-hidden rounded-lg">
         <img
           src={agent.photo || "/placeholder.svg"}
@@ -42,48 +53,26 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
       <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
       <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
       <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
-      {agent.instagram_handle && (
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <Button
-              onClick={() => handleInstagramClick(agent.instagram_handle!)}
-              variant="outline"
-              className="w-full flex items-center justify-center gap-2"
-            >
-              <Instagram className="h-4 w-4" />
-              <span>@{agent.instagram_handle}</span>
-            </Button>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-80">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <img
-                  src={agent.photo || "/placeholder.svg"}
-                  alt={agent.name}
-                  className="h-10 w-10 rounded-full"
-                />
-                <div>
-                  <h4 className="text-sm font-semibold">@{agent.instagram_handle}</h4>
-                  <p className="text-xs text-gray-500">{agent.name}</p>
-                </div>
-              </div>
-              <p className="text-sm">
-                Professional real estate agent specializing in {agent.area} properties.
-              </p>
-              <div className="pt-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => handleInstagramClick(agent.instagram_handle!)}
-                >
-                  View Full Profile
-                </Button>
-              </div>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
-      )}
+      <div className="flex gap-2">
+        {agent.instagram_handle && (
+          <Button
+            onClick={() => handleInstagramClick(agent.instagram_handle!)}
+            variant="outline"
+            className="flex-1"
+          >
+            <Instagram className="h-4 w-4" />
+            <span>Instagram</span>
+          </Button>
+        )}
+        <Button
+          onClick={() => handleContactClick(agent.email)}
+          variant="default"
+          className="flex-1"
+        >
+          <Mail className="h-4 w-4" />
+          <span>Contact</span>
+        </Button>
+      </div>
     </motion.div>
   );
 };
