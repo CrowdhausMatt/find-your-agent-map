@@ -25,8 +25,8 @@ const MapContainer = ({ agents, onSelectAgent, center, groupedAgents }: MapConta
       const mapInstance = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/nulmatt/cm5e0vnpz004v01sc25uj12pv',
-        zoom: 12,
-        center: [-0.1278, 51.5074],
+        zoom: 11,
+        center: [-0.1278, 51.5074], // London center
         pitch: 45,
       });
 
@@ -34,12 +34,17 @@ const MapContainer = ({ agents, onSelectAgent, center, groupedAgents }: MapConta
         console.log('Map loaded successfully');
         map.current = mapInstance;
 
+        // Add navigation controls
         mapInstance.addControl(
           new mapboxgl.NavigationControl({
             visualizePitch: true,
           }),
           'top-right'
         );
+
+        // Log agents for debugging
+        console.log('Agents to display:', agents);
+        console.log('Grouped agents:', groupedAgents);
       });
 
     } catch (error) {
@@ -64,10 +69,23 @@ const MapContainer = ({ agents, onSelectAgent, center, groupedAgents }: MapConta
     }
   }, [center]);
 
+  // Add debugging for markers
+  useEffect(() => {
+    if (map.current) {
+      console.log('Current agents on map:', Array.from(groupedAgents.entries()));
+    }
+  }, [groupedAgents]);
+
   return (
-    <div ref={mapContainer} className="absolute inset-0 z-0">
+    <div className="relative w-full h-screen">
+      <div ref={mapContainer} className="absolute inset-0 z-0" />
       {map.current && Array.from(groupedAgents.entries()).map(([key, agentsAtLocation]) => {
         const [firstAgent] = agentsAtLocation;
+        if (!firstAgent.latitude || !firstAgent.longitude) {
+          console.log('Agent missing coordinates:', firstAgent);
+          return null;
+        }
+        console.log('Rendering marker for agent:', firstAgent.name, 'at position:', firstAgent.latitude, firstAgent.longitude);
         return (
           <AgentMarker
             key={key}
