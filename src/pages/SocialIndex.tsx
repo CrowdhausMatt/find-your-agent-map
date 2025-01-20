@@ -11,7 +11,7 @@ const SocialIndex = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-y-auto h-screen">
-      <div className="absolute top-4 left-4 z-10">
+      <div className="fixed top-4 left-4 z-10">
         <Link to="https://knokknok.social/" className="inline-block">
           <img 
             src="/lovable-uploads/d9d07162-5597-4d5a-99ab-1ae84b35ca13.png" 
