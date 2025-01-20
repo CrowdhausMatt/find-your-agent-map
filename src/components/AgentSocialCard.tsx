@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Mail, Star, Play } from 'lucide-react';
+import { Instagram, Mail, Star, Volume, VolumeX } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { SocialAgent } from '@/types';
@@ -12,6 +12,7 @@ interface AgentSocialCardProps {
 
 const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
@@ -19,6 +20,11 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
 
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMuted(!isMuted);
   };
 
   return (
@@ -55,12 +61,15 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
               src={agent.video_url}
               className="h-full w-full object-cover"
               autoPlay 
-              muted 
+              muted={isMuted}
               loop
             />
-            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-              <Play className="w-12 h-12 text-white" />
-            </div>
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-2 right-2 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors text-white z-20"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume className="w-4 h-4" />}
+            </button>
           </div>
         ) : (
           <img
