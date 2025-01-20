@@ -21,11 +21,22 @@ const AgentsList = () => {
         if (leadersError) throw leadersError;
 
         // Calculate rating and sort leaders
-        const leadersWithRating = leaders?.map(leader => ({
-          ...leader,
-          rating: (leader.follower_count * Number(leader.engagement_rate)) / 100,
-          tiktok_handle: null // Add default value
-        })) || [];
+        const leadersWithRating = leaders?.map(leader => {
+          // Get the public URL for the video if it exists
+          const videoUrl = leader.video_url 
+            ? supabase.storage
+                .from('agent-videos')
+                .getPublicUrl(leader.video_url.split('/').pop() || '')
+                .data.publicUrl
+            : null;
+
+          return {
+            ...leader,
+            rating: (leader.follower_count * Number(leader.engagement_rate)) / 100,
+            tiktok_handle: null, // Add default value
+            video_url: videoUrl
+          };
+        }) || [];
 
         // Sort by rating
         const sortedLeaders = leadersWithRating.sort((a, b) => (b.rating || 0) - (a.rating || 0));
@@ -52,11 +63,22 @@ const AgentsList = () => {
 
         if (risingError) throw risingError;
 
-        // Add tiktok_handle to rising stars data
-        const risingWithTiktok = rising?.map(star => ({
-          ...star,
-          tiktok_handle: null // Add default value
-        })) || [];
+        // Add tiktok_handle to rising stars data and process video URLs
+        const risingWithTiktok = rising?.map(star => {
+          // Get the public URL for the video if it exists
+          const videoUrl = star.video_url 
+            ? supabase.storage
+                .from('agent-videos')
+                .getPublicUrl(star.video_url.split('/').pop() || '')
+                .data.publicUrl
+            : null;
+
+          return {
+            ...star,
+            tiktok_handle: null, // Add default value
+            video_url: videoUrl
+          };
+        }) || [];
 
         setSocialLeaders(finalLeaders);
         setRisingStars(risingWithTiktok);
