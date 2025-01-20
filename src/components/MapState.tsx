@@ -45,24 +45,28 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
           created_at: dbAgent.created_at
         }));
 
-        console.log('Fetched agents:', agentData);
+        console.log('Total agents fetched:', agentData.length);
         setAgents(agentData);
 
-        // Group agents by location with better precision
+        // Group agents by location with less precision to handle floating point differences
         const groupedByLocation = agentData.reduce((groups, agent) => {
           if (agent.latitude && agent.longitude) {
-            // Use more precise coordinates for grouping
-            const key = `${agent.latitude.toFixed(6)},${agent.longitude.toFixed(6)}`;
-            const existingGroup = groups.get(key) || [];
-            groups.set(key, [...existingGroup, agent]);
+            // Round to 4 decimal places (approximately 11 meters of precision)
+            const key = `${Number(agent.latitude).toFixed(4)},${Number(agent.longitude).toFixed(4)}`;
+            if (!groups.has(key)) {
+              groups.set(key, []);
+            }
+            groups.get(key)?.push(agent);
             console.log(`Grouped agent ${agent.name} at ${key}`);
           } else {
-            console.log(`Agent ${agent.name} missing coordinates`);
+            console.warn(`Agent ${agent.name} missing coordinates`);
           }
           return groups;
         }, new Map<string, Agent[]>());
 
-        console.log('Grouped agents count:', groupedByLocation.size);
+        console.log('Number of unique locations:', groupedByLocation.size);
+        console.log('Grouped locations:', Array.from(groupedByLocation.keys()));
+        
         setGroupedAgents(groupedByLocation);
       } catch (err) {
         console.error('Error fetching agents:', err);
