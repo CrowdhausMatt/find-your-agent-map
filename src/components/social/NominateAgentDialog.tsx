@@ -6,36 +6,62 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { Upload } from "lucide-react";
 
 interface NominationFormData {
   name: string;
   agency: string;
   social_handle: string;
+  video?: FileList;
 }
 
 export function NominateAgentDialog() {
   const [open, setOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const form = useForm<NominationFormData>();
 
   const onSubmit = async (data: NominationFormData) => {
     try {
-      const { error } = await supabase
+      setIsUploading(true);
+
+      // First create the social agent
+      const { data: agent, error } = await supabase
         .from('social_agents')
         .insert({
           name: data.name,
           agency: data.agency,
           instagram_handle: data.social_handle,
           email: `${data.social_handle}@placeholder.com`,
-          is_rising_star: true // New nominations start as rising stars
-        });
+          is_rising_star: true
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // If there's a video, upload it
+      if (data.video?.[0]) {
+        const formData = new FormData();
+        formData.append('video', data.video[0]);
+        formData.append('agentId', agent.id);
+
+        const response = await supabase.functions.invoke('upload-agent-video', {
+          body: formData
+        });
+
+        if (response.error) {
+          throw new Error('Failed to upload video');
+        }
+      }
 
       toast.success("Agent nominated successfully!");
       setOpen(false);
       form.reset();
     } catch (error) {
       toast.error("Failed to nominate agent. Please try again.");
+      console.error('Nomination error:', error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -97,7 +123,46 @@ export function NominateAgentDialog() {
               )}
             />
 
-            <Button type="submit" className="w-full">Submit Nomination</Button>
+            <FormField
+              control={form.control}
+              name="video"
+              render={({ field: { onChange, value, ...field } }) => (
+                <FormItem>
+                  <FormLabel>Video (optional)</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        onChange={(e) => onChange(e.target.files)}
+                        {...field}
+                      />
+                      {value && value[0] && (
+                        <span className="text-sm text-gray-500">
+                          {value[0].name}
+                        </span>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isUploading}
+            >
+              {isUploading ? (
+                <span className="flex items-center gap-2">
+                  <Upload className="w-4 h-4 animate-spin" />
+                  Uploading...
+                </span>
+              ) : (
+                'Submit Nomination'
+              )}
+            </Button>
           </form>
         </Form>
       </DialogContent>
