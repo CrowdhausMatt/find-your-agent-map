@@ -27,25 +27,36 @@ const MapComponent = () => {
   const getNearbyAgents = (agents: Agent[], searchLocation: { lat: number; lng: number } | null) => {
     if (!searchLocation || !agents) return [];
     
+    // Convert km to degrees (approximately)
+    const kmToDegrees = 1 / 111; // 1 degree ≈ 111km
+    const radius = 1 * kmToDegrees; // 1km radius
+    
     return agents.filter(agent => {
       if (!agent.latitude || !agent.longitude) return false;
       
-      // Calculate distance using the Haversine formula
+      // Simple bounding box check first (optimization)
+      const latDiff = Math.abs(agent.latitude - searchLocation.lat);
+      const lngDiff = Math.abs(agent.longitude - searchLocation.lng);
+      
+      if (latDiff > radius || lngDiff > radius) return false;
+      
+      // More precise distance calculation using the Haversine formula
+      const R = 6371; // Earth's radius in km
+      const dLat = (agent.latitude - searchLocation.lat) * Math.PI / 180;
+      const dLon = (agent.longitude - searchLocation.lng) * Math.PI / 180;
       const lat1 = searchLocation.lat * Math.PI / 180;
       const lat2 = agent.latitude * Math.PI / 180;
-      const deltaLat = (agent.latitude - searchLocation.lat) * Math.PI / 180;
-      const deltaLon = (agent.longitude - searchLocation.lng) * Math.PI / 180;
       
       const a = 
-        Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
         Math.cos(lat1) * Math.cos(lat2) * 
-        Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+        Math.sin(dLon/2) * Math.sin(dLon/2);
       
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      const distance = 6371 * c; // Earth's radius (6371 km) * c
+      const distance = R * c;
       
-      console.log(`Distance to agent ${agent.name}: ${distance}km`);
-      return distance <= 5; // 5km radius
+      console.log(`Distance from search location to ${agent.name}: ${distance.toFixed(2)}km`);
+      return distance <= 1; // Within 1km
     });
   };
 
@@ -54,7 +65,14 @@ const MapComponent = () => {
     setSearchLocation(location);
     setSelectedAgent(null);
     setIsPanelVisible(true);
-    const nearby = getNearbyAgents(agents || [], location);
+    
+    // Get all agents from grouped locations
+    const allAgents: Agent[] = [];
+    groupedAgents.forEach(agentsAtLocation => {
+      allAgents.push(...agentsAtLocation);
+    });
+    
+    const nearby = getNearbyAgents(allAgents, location);
     console.log('Found nearby agents:', nearby.length);
     setDisplayedAgents(nearby);
   };
