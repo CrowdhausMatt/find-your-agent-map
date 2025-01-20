@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Mail, Star } from 'lucide-react';
+import { Instagram, Mail, Star, Play } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { SocialAgent } from '@/types';
@@ -11,6 +11,8 @@ interface AgentSocialCardProps {
 }
 
 const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
+  const [isHovering, setIsHovering] = useState(false);
+
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
   };
@@ -42,12 +44,31 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
           <Star className="w-3 h-3" /> Top Engagement
         </Badge>
       )}
-      <div className="mb-4 aspect-square overflow-hidden rounded-lg">
-        <img
-          src={agent.photo || "/placeholder.svg"}
-          alt={agent.name}
-          className="h-full w-full object-cover"
-        />
+      <div 
+        className="mb-4 aspect-square overflow-hidden rounded-lg relative"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        {agent.video_url && isHovering ? (
+          <div className="relative w-full h-full">
+            <video 
+              src={agent.video_url}
+              className="h-full w-full object-cover"
+              autoPlay 
+              muted 
+              loop
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+              <Play className="w-12 h-12 text-white" />
+            </div>
+          </div>
+        ) : (
+          <img
+            src={agent.photo || "/placeholder.svg"}
+            alt={agent.name}
+            className="h-full w-full object-cover"
+          />
+        )}
       </div>
       <h3 className="mb-2 text-xl font-semibold">{agent.name}</h3>
       <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>

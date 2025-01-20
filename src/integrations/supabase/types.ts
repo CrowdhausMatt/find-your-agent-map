@@ -69,6 +69,7 @@ export type Database = {
           name: string
           nomination_date: string | null
           photo: string | null
+          video_url: string | null
         }
         Insert: {
           about?: string | null
@@ -84,6 +85,7 @@ export type Database = {
           name: string
           nomination_date?: string | null
           photo?: string | null
+          video_url?: string | null
         }
         Update: {
           about?: string | null
@@ -99,6 +101,7 @@ export type Database = {
           name?: string
           nomination_date?: string | null
           photo?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }

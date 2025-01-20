@@ -30,4 +30,5 @@ export interface SocialAgent {
   is_leader: boolean;
   rating?: number;
   isTopEngagement?: boolean;
+  video_url?: string | null;
 }
