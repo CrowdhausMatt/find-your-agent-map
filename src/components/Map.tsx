@@ -35,20 +35,25 @@ const MapComponent = () => {
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       const distance = R * c;
       
-      return distance <= 1; // Only return agents within 1km
+      return distance <= 2; // Increased search radius to 2km for better results
     });
   };
 
   const nearbyAgents = searchLocation ? getNearbyAgents(agents || [], searchLocation) : [];
 
   const handleSearch = (location: { lat: number; lng: number }) => {
+    console.log('Search location:', location);
     setSearchLocation(location);
     setSelectedAgent(null);
     setIsPanelVisible(true);
-    setDisplayedAgents(getNearbyAgents(agents || [], location));
+    const nearby = getNearbyAgents(agents || [], location);
+    console.log('Found nearby agents:', nearby.length);
+    setDisplayedAgents(nearby);
   };
 
   const handleSelectAgent = (agent: Agent) => {
+    if (!agent.latitude || !agent.longitude) return;
+    
     const key = `${agent.latitude},${agent.longitude}`;
     const agentsAtLocation = groupedAgents.get(key) || [];
     
