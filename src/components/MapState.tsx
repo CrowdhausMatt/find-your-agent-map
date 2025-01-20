@@ -23,11 +23,14 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const fetchAgents = async () => {
       try {
+        console.log('Fetching agents from Supabase...');
         const { data, error: supabaseError } = await supabase
           .from('agents')
           .select('*');
 
         if (supabaseError) throw supabaseError;
+
+        console.log('Fetched agents:', data);
 
         // Convert database response to Agent type
         const agentData = data.map((dbAgent: any): Agent => ({
@@ -36,14 +39,16 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
           agency: dbAgent.agency,
           email: dbAgent.email,
           about: dbAgent.about,
-          sweetSpot: dbAgent.sweet_spot,  // Map sweet_spot to sweetSpot
+          sweetSpot: dbAgent.sweet_spot,
           area: dbAgent.area,
-          latitude: dbAgent.latitude,
-          longitude: dbAgent.longitude,
+          latitude: dbAgent.latitude ? parseFloat(dbAgent.latitude) : null,
+          longitude: dbAgent.longitude ? parseFloat(dbAgent.longitude) : null,
           photo: dbAgent.photo,
           instagram_handle: dbAgent.instagram_handle || null,
           created_at: dbAgent.created_at
         }));
+
+        console.log('Processed agents:', agentData);
 
         setAgents(agentData);
 
@@ -57,8 +62,10 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
           return groups;
         }, new Map<string, Agent[]>());
 
+        console.log('Grouped agents:', Array.from(groupedByLocation.entries()));
         setGroupedAgents(groupedByLocation);
       } catch (err) {
+        console.error('Error fetching agents:', err);
         setError(err as Error);
       } finally {
         setIsLoading(false);
@@ -100,10 +107,10 @@ export const convertToAgent = (dbAgent: any): Agent => {
     agency: dbAgent.agency,
     email: dbAgent.email,
     about: dbAgent.about,
-    sweetSpot: dbAgent.sweet_spot,  // Map sweet_spot to sweetSpot
+    sweetSpot: dbAgent.sweet_spot,
     area: dbAgent.area,
-    latitude: dbAgent.latitude,
-    longitude: dbAgent.longitude,
+    latitude: dbAgent.latitude ? parseFloat(dbAgent.latitude) : null,
+    longitude: dbAgent.longitude ? parseFloat(dbAgent.longitude) : null,
     photo: dbAgent.photo,
     instagram_handle: dbAgent.instagram_handle || null,
     created_at: dbAgent.created_at
