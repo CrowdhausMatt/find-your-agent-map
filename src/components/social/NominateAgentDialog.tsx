@@ -24,7 +24,7 @@ export function NominateAgentDialog() {
     try {
       setIsUploading(true);
 
-      // First create the social agent
+      // First create the social agent with both flags set to false
       const { data: agent, error } = await supabase
         .from('social_agents')
         .insert({
@@ -32,7 +32,8 @@ export function NominateAgentDialog() {
           agency: data.agency,
           instagram_handle: data.social_handle,
           email: `${data.social_handle}@placeholder.com`,
-          is_rising_star: true
+          is_rising_star: false,
+          is_leader: false
         })
         .select()
         .single();
