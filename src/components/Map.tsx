@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapContainer from './MapContainer';
 import MapLayout from './MapLayout';
 import { Agent } from '../types';
@@ -12,11 +12,17 @@ const MapComponent = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const { agents, isLoading, error, groupedAgents } = useMapState();
   const [displayedAgents, setDisplayedAgents] = useState<Agent[]>([]);
   const navigate = useNavigate();
-  
-  const { agents, isLoading, error, groupedAgents } = useMapState();
 
+  // Initialize displayedAgents with all agents when they are loaded
+  useEffect(() => {
+    if (agents) {
+      setDisplayedAgents(agents);
+    }
+  }, [agents]);
+  
   // Get nearby agents for the panel
   const getNearbyAgents = (agents: Agent[], searchLocation: { lat: number; lng: number } | null) => {
     if (!searchLocation || !agents) return [];
@@ -39,7 +45,7 @@ const MapComponent = () => {
       const distance = 6371 * c; // Earth's radius (6371 km) * c
       
       console.log(`Distance to agent ${agent.name}: ${distance}km`);
-      return distance <= 5; // Increased radius to 5km for better results
+      return distance <= 5; // 5km radius
     });
   };
 
@@ -91,7 +97,7 @@ const MapComponent = () => {
         isPanelVisible={isPanelVisible}
         onClosePanel={() => {
           setIsPanelVisible(false);
-          setDisplayedAgents([]);
+          setDisplayedAgents(agents || []); // Reset to all agents when closing panel
         }}
       />
       <MapHeader />
