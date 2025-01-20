@@ -21,7 +21,7 @@ export interface SocialAgent {
   about: string | null;
   photo: string | null;
   instagram_handle: string | null;
-  tiktok_handle: string | null;
+  tiktok_handle?: string | null; // Made optional with ?
   area: string | null;
   nomination_date: string;
   follower_count: number;

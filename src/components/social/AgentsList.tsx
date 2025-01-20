@@ -23,11 +23,12 @@ const AgentsList = () => {
         // Calculate rating and sort leaders
         const leadersWithRating = leaders?.map(leader => ({
           ...leader,
-          rating: (leader.follower_count * Number(leader.engagement_rate)) / 100
+          rating: (leader.follower_count * Number(leader.engagement_rate)) / 100,
+          tiktok_handle: null // Add default value
         })) || [];
 
         // Sort by rating
-        const sortedLeaders = leadersWithRating.sort((a, b) => b.rating - a.rating);
+        const sortedLeaders = leadersWithRating.sort((a, b) => (b.rating || 0) - (a.rating || 0));
 
         // Find top 5 engagement rates
         const topEngagementAgents = new Set(
@@ -51,8 +52,14 @@ const AgentsList = () => {
 
         if (risingError) throw risingError;
 
+        // Add tiktok_handle to rising stars data
+        const risingWithTiktok = rising?.map(star => ({
+          ...star,
+          tiktok_handle: null // Add default value
+        })) || [];
+
         setSocialLeaders(finalLeaders);
-        setRisingStars(rising || []);
+        setRisingStars(risingWithTiktok);
       } catch (error) {
         console.error('Error fetching agents:', error);
       } finally {
