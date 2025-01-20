@@ -24,22 +24,24 @@ const MapComponent = () => {
     return agents.filter(agent => {
       if (!agent.latitude || !agent.longitude) return false;
       
-      // Calculate distance in kilometers using the Haversine formula
-      const R = 6371; // Earth's radius in km
-      const dLat = (agent.latitude - searchLocation.lat) * Math.PI / 180;
-      const dLon = (agent.longitude - searchLocation.lng) * Math.PI / 180;
-      const a = 
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(searchLocation.lat * Math.PI / 180) * Math.cos(agent.latitude * Math.PI / 180) * 
-        Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      const distance = R * c;
+      // Calculate distance using the Haversine formula
+      const lat1 = searchLocation.lat * Math.PI / 180;
+      const lat2 = agent.latitude * Math.PI / 180;
+      const deltaLat = (agent.latitude - searchLocation.lat) * Math.PI / 180;
+      const deltaLon = (agent.longitude - searchLocation.lng) * Math.PI / 180;
       
-      return distance <= 2; // Increased search radius to 2km for better results
+      const a = 
+        Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
+        Math.cos(lat1) * Math.cos(lat2) * 
+        Math.sin(deltaLon/2) * Math.sin(deltaLon/2);
+      
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = 6371 * c; // Earth's radius (6371 km) * c
+      
+      console.log(`Distance to agent ${agent.name}: ${distance}km`);
+      return distance <= 5; // Increased radius to 5km for better results
     });
   };
-
-  const nearbyAgents = searchLocation ? getNearbyAgents(agents || [], searchLocation) : [];
 
   const handleSearch = (location: { lat: number; lng: number }) => {
     console.log('Search location:', location);
