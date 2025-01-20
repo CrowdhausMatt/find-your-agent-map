@@ -85,7 +85,7 @@ const MapComponent = () => {
       <MapLayout
         searchLocation={searchLocation}
         onSearch={handleSearch}
-        nearbyAgents={displayedAgents.length > 0 ? displayedAgents : nearbyAgents}
+        nearbyAgents={displayedAgents}
         selectedAgent={selectedAgent}
         onSelectAgent={setSelectedAgent}
         isPanelVisible={isPanelVisible}
