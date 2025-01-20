@@ -27,6 +27,10 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
     setIsMuted(!isMuted);
   };
 
+  const handleKnokKnokClick = () => {
+    window.open('https://apps.apple.com/gb/app/knokknok-social/id6739164492', '_blank');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -83,24 +87,33 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
       <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
       <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
       <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
-      <div className="flex gap-2">
-        {agent.instagram_handle && (
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2">
+          {agent.instagram_handle && (
+            <Button
+              onClick={() => handleInstagramClick(agent.instagram_handle!)}
+              variant="outline"
+              className="flex-1"
+            >
+              <Instagram className="h-4 w-4" />
+              <span>Instagram</span>
+            </Button>
+          )}
           <Button
-            onClick={() => handleInstagramClick(agent.instagram_handle!)}
-            variant="outline"
+            onClick={() => handleContactClick(agent.email)}
+            variant="default"
             className="flex-1"
           >
-            <Instagram className="h-4 w-4" />
-            <span>Instagram</span>
+            <Mail className="h-4 w-4" />
+            <span>Contact</span>
           </Button>
-        )}
+        </div>
         <Button
-          onClick={() => handleContactClick(agent.email)}
-          variant="default"
-          className="flex-1"
+          onClick={handleKnokKnokClick}
+          variant="outline"
+          className="w-full bg-white hover:bg-gray-50"
         >
-          <Mail className="h-4 w-4" />
-          <span>Contact</span>
+          Knok Knok
         </Button>
       </div>
     </motion.div>

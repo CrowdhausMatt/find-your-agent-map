@@ -88,12 +88,18 @@ const MapComponent = () => {
         }}
       />
       <MapHeader />
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-4">
         <Button 
           onClick={() => navigate('/register')}
           className="bg-primary text-white shadow-lg hover:bg-primary/90"
         >
           Want to appear here?
+        </Button>
+        <Button 
+          onClick={() => navigate('/social-index')}
+          className="bg-purple-600 text-white shadow-lg hover:bg-purple-700"
+        >
+          Social Index
         </Button>
       </div>
     </div>
