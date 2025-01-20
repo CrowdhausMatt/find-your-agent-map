@@ -45,20 +45,27 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
           created_at: dbAgent.created_at
         }));
 
+        console.log('Fetched agents:', agentData);
         setAgents(agentData);
 
-        // Group agents by location
+        // Group agents by location with better precision
         const groupedByLocation = agentData.reduce((groups, agent) => {
           if (agent.latitude && agent.longitude) {
-            const key = `${agent.latitude},${agent.longitude}`;
+            // Use more precise coordinates for grouping
+            const key = `${agent.latitude.toFixed(6)},${agent.longitude.toFixed(6)}`;
             const existingGroup = groups.get(key) || [];
             groups.set(key, [...existingGroup, agent]);
+            console.log(`Grouped agent ${agent.name} at ${key}`);
+          } else {
+            console.log(`Agent ${agent.name} missing coordinates`);
           }
           return groups;
         }, new Map<string, Agent[]>());
 
+        console.log('Grouped agents count:', groupedByLocation.size);
         setGroupedAgents(groupedByLocation);
       } catch (err) {
+        console.error('Error fetching agents:', err);
         setError(err as Error);
       } finally {
         setIsLoading(false);
@@ -90,24 +97,6 @@ export const useMapState = () => {
     throw new Error('useMapState must be used within a MapStateProvider');
   }
   return context;
-};
-
-// Helper function to convert database agent to Agent type
-export const convertToAgent = (dbAgent: any): Agent => {
-  return {
-    id: dbAgent.id,
-    name: dbAgent.name,
-    agency: dbAgent.agency,
-    email: dbAgent.email,
-    about: dbAgent.about,
-    sweetSpot: dbAgent.sweet_spot,
-    area: dbAgent.area,
-    latitude: dbAgent.latitude,
-    longitude: dbAgent.longitude,
-    photo: dbAgent.photo,
-    instagram_handle: dbAgent.instagram_handle || null,
-    created_at: dbAgent.created_at
-  };
 };
 
 export default MapStateContext;
