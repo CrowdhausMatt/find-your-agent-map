@@ -26,6 +26,10 @@ const SocialIndex = () => {
       {/* Categories Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          <p className="text-center text-gray-700 mb-8 max-w-2xl mx-auto">
+            Our Top Social Media Agents Leaderboard is not just about follower numbers but engagement rates, authenticity and consistency!
+          </p>
+          
           <Tabs defaultValue="leaders" className="w-full">
             <TabsList className="mb-8 grid w-full grid-cols-2 max-w-[400px] mx-auto">
               <TabsTrigger value="leaders">The Social Leaders</TabsTrigger>
