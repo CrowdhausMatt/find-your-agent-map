@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Instagram, Mail, Star, Volume, VolumeX } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Instagram, Mail, Star, Volume, VolumeX, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { SocialAgent } from '@/types';
@@ -10,9 +10,25 @@ interface AgentSocialCardProps {
   ranking?: number;
 }
 
+const FloatingHeart = ({ x }: { x: number }) => (
+  <motion.div
+    initial={{ y: 0, opacity: 1, x }}
+    animate={{
+      y: -100,
+      opacity: 0,
+      x: x + (Math.random() * 50 - 25),
+    }}
+    transition={{ duration: 1.5, ease: "easeOut" }}
+    className="absolute bottom-0 text-pink-500"
+  >
+    <Heart size={16} fill="currentColor" />
+  </motion.div>
+);
+
 const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [hearts, setHearts] = useState<number[]>([]);
 
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
@@ -29,6 +45,14 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
 
   const handleKnokKnokClick = () => {
     window.open('https://apps.apple.com/gb/app/knokknok-social/id6739164492', '_blank');
+  };
+
+  const handleHeartHover = () => {
+    const newHearts = Array.from({ length: 5 }, (_, i) => i).map(
+      () => Math.random() * 40 - 20
+    );
+    setHearts(newHearts);
+    setTimeout(() => setHearts([]), 1500);
   };
 
   return (
@@ -83,7 +107,20 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
           />
         )}
       </div>
-      <h3 className="mb-2 text-xl font-semibold">{agent.name}</h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xl font-semibold">{agent.name}</h3>
+        <div 
+          className="relative cursor-pointer text-gray-400 hover:text-pink-500 transition-colors"
+          onMouseEnter={handleHeartHover}
+        >
+          <Heart className="w-5 h-5" />
+          <AnimatePresence>
+            {hearts.map((x, i) => (
+              <FloatingHeart key={`${i}-${x}`} x={x} />
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
       <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
       <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
       <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
