@@ -60,7 +60,7 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative"
+      className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative h-full flex flex-col"
     >
       {ranking && (
         <Badge 
@@ -123,14 +123,16 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
       </div>
       <p className="mb-2 text-sm text-gray-600">{agent.agency}</p>
       <p className="mb-4 text-sm text-gray-500">{agent.area}</p>
-      <p className="text-sm text-gray-700 mb-4">{agent.about}</p>
-      <div className="flex flex-col gap-2">
+      <div className="flex-1">
+        <p className="text-sm text-gray-700">{agent.about}</p>
+      </div>
+      <div className="flex flex-col gap-2 mt-4">
         <div className="flex gap-2">
           {agent.instagram_handle && (
             <Button
               onClick={() => handleInstagramClick(agent.instagram_handle!)}
               variant="outline"
-              className="flex-1"
+              className="flex-1 h-10"
             >
               <Instagram className="h-4 w-4" />
               <span>Instagram</span>
@@ -139,7 +141,7 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
           <Button
             onClick={() => handleContactClick(agent.email)}
             variant="default"
-            className="flex-1"
+            className="flex-1 h-10"
           >
             <Mail className="h-4 w-4" />
             <span>Contact</span>
@@ -148,7 +150,7 @@ const AgentSocialCard = ({ agent, ranking }: AgentSocialCardProps) => {
         <Button
           onClick={handleKnokKnokClick}
           variant="outline"
-          className="w-full bg-white hover:bg-gray-50"
+          className="w-full bg-white hover:bg-gray-50 h-10"
         >
           Knok Knok
         </Button>
