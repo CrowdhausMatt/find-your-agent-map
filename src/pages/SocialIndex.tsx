@@ -1,14 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Map } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SocialHero from "@/components/social/SocialHero";
 import MetricsSpotlight from "@/components/social/MetricsSpotlight";
 import AgentsList from "@/components/social/AgentsList";
 
 const SocialIndex = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-white overflow-y-auto h-screen">
       <div className="fixed top-4 left-4 z-10">
