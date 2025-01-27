@@ -95,7 +95,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
 
           <AnimatePresence>
             {showHearts && (
-              <div className="absolute inset-x-0 -top-2 h-40 pointer-events-none">
+              <div className="absolute inset-x-0 -top-2 h-60 pointer-events-none">
                 {[...Array(6)].map((_, i) => (
                   <motion.div
                     key={i}
@@ -107,14 +107,15 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
                     }}
                     animate={{ 
                       opacity: 0,
-                      scale: 1.5,
-                      x: `${50 + (Math.random() * 60 - 30)}%`,
-                      y: '0%'
+                      scale: 2,
+                      x: `50%`,
+                      y: '-100%'
                     }}
                     exit={{ opacity: 0 }}
                     transition={{ 
-                      duration: 1,
-                      delay: i * 0.1
+                      duration: 1.2,
+                      delay: i * 0.1,
+                      ease: "easeOut"
                     }}
                     className="absolute"
                   >
