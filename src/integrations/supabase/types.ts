@@ -65,6 +65,7 @@ export type Database = {
           instagram_handle: string | null
           title: string
           video_url: string
+          votes: number
         }
         Insert: {
           agency: string
@@ -76,6 +77,7 @@ export type Database = {
           instagram_handle?: string | null
           title: string
           video_url: string
+          votes?: number
         }
         Update: {
           agency?: string
@@ -87,6 +89,7 @@ export type Database = {
           instagram_handle?: string | null
           title?: string
           video_url?: string
+          votes?: number
         }
         Relationships: []
       }

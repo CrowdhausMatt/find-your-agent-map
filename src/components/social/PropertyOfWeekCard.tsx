@@ -1,13 +1,48 @@
 import { motion } from "framer-motion";
-import { Instagram, Mail } from "lucide-react";
+import { Instagram, Mail, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyOfWeek } from "@/types";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 interface PropertyOfWeekCardProps {
   property: PropertyOfWeek;
 }
 
 const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
+  const [votes, setVotes] = useState(property.votes || 0);
+  const [isVoting, setIsVoting] = useState(false);
+  const { toast } = useToast();
+
+  const handleVote = async () => {
+    if (isVoting) return;
+    
+    setIsVoting(true);
+    try {
+      const { error } = await supabase
+        .from('property_of_week')
+        .update({ votes: votes + 1 })
+        .eq('id', property.id);
+
+      if (error) throw error;
+
+      setVotes(prev => prev + 1);
+      toast({
+        description: "Thanks for your vote!",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error('Error voting:', error);
+      toast({
+        variant: "destructive",
+        description: "Failed to register vote. Please try again.",
+      });
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
   const handleInstagramClick = (handle: string) => {
     window.open(`https://instagram.com/${handle}`, '_blank');
   };
@@ -27,6 +62,17 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
       transition={{ duration: 0.4 }}
       className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative h-full flex flex-col"
     >
+      <div className="flex items-center justify-between mb-4">
+        <Button
+          onClick={handleVote}
+          variant="outline"
+          disabled={isVoting}
+          className="flex items-center gap-2"
+        >
+          <ThumbsUp className="h-4 w-4" />
+          <span>{votes}</span>
+        </Button>
+      </div>
       <div className="mb-4 aspect-[9/16] overflow-hidden rounded-lg relative">
         <video 
           src={property.video_url}
