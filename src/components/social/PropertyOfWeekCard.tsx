@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Instagram, Mail, Squiggle } from "lucide-react";
+import { Instagram, Mail, ArrowBigUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyOfWeek } from "@/types";
 import { useState } from "react";
@@ -69,7 +69,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
           disabled={isVoting}
           className="w-full bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#9b87f5] text-white border-none h-12"
         >
-          <Squiggle className="h-4 w-4 mr-2" />
+          <ArrowBigUp className="h-4 w-4 mr-2" />
           <span>Upvote</span>
           <span className="ml-2">({votes})</span>
         </Button>
