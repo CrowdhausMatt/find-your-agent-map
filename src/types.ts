@@ -41,4 +41,6 @@ export interface PropertyOfWeek {
   agency: string;
   video_url: string;
   created_at?: string | null;
+  instagram_handle?: string | null;
+  email?: string | null;
 }

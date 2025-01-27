@@ -60,7 +60,9 @@ export type Database = {
           agent_name: string
           created_at: string | null
           description: string | null
+          email: string | null
           id: string
+          instagram_handle: string | null
           title: string
           video_url: string
         }
@@ -69,7 +71,9 @@ export type Database = {
           agent_name: string
           created_at?: string | null
           description?: string | null
+          email?: string | null
           id?: string
+          instagram_handle?: string | null
           title: string
           video_url: string
         }
@@ -78,7 +82,9 @@ export type Database = {
           agent_name?: string
           created_at?: string | null
           description?: string | null
+          email?: string | null
           id?: string
+          instagram_handle?: string | null
           title?: string
           video_url?: string
         }

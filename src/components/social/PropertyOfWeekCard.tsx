@@ -51,14 +51,16 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
                     <span>Instagram</span>
                   </Button>
                 )}
-                <Button
-                  onClick={() => handleContactClick(property.email)}
-                  variant="default"
-                  className="flex-1 h-10"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>Contact</span>
-                </Button>
+                {property.email && (
+                  <Button
+                    onClick={() => handleContactClick(property.email!)}
+                    variant="default"
+                    className="flex-1 h-10"
+                  >
+                    <Mail className="h-4 w-4" />
+                    <span>Contact</span>
+                  </Button>
+                )}
               </div>
               <Button
                 onClick={() => window.open('https://apps.apple.com/gb/app/knokknok-social/id6739164492', '_blank')}
