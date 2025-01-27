@@ -36,12 +36,12 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
         />
       </div>
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xl font-semibold">{property.title}</h3>
+        <h3 className="text-xl font-semibold truncate">{property.title}</h3>
       </div>
-      <p className="mb-2 text-sm text-gray-600">{property.agency}</p>
-      <p className="mb-4 text-sm text-gray-500">{property.agent_name}</p>
+      <p className="mb-2 text-sm text-gray-600 truncate">{property.agency}</p>
+      <p className="mb-4 text-sm text-gray-500 truncate">{property.agent_name}</p>
       <div className="flex-1">
-        <p className="text-sm text-gray-700">{property.description}</p>
+        <p className="text-sm text-gray-700 line-clamp-3">{property.description}</p>
       </div>
       <div className="flex flex-col gap-2 mt-4">
         <div className="flex gap-2">
@@ -51,7 +51,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
               variant="outline"
               className="flex-1 h-10"
             >
-              <Instagram className="h-4 w-4" />
+              <Instagram className="h-4 w-4 mr-2" />
               <span>Instagram</span>
             </Button>
           )}
@@ -61,7 +61,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
               variant="default"
               className="flex-1 h-10"
             >
-              <Mail className="h-4 w-4" />
+              <Mail className="h-4 w-4 mr-2" />
               <span>Contact</span>
             </Button>
           )}

@@ -132,7 +132,7 @@ const AgentsList = () => {
       </TabsContent>
 
       <TabsContent value="property-of-week">
-        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {propertyOfWeek.map((property) => (
             <PropertyOfWeekCard key={property.id} property={property} />
           ))}
