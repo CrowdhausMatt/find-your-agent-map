@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Instagram, Mail, ThumbsUp } from "lucide-react";
+import { Instagram, Mail, Squiggle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyOfWeek } from "@/types";
 import { useState } from "react";
@@ -62,15 +62,16 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
       transition={{ duration: 0.4 }}
       className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative h-full flex flex-col"
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="w-full mb-4">
         <Button
           onClick={handleVote}
           variant="outline"
           disabled={isVoting}
-          className="flex items-center gap-2"
+          className="w-full bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#9b87f5] text-white border-none h-12"
         >
-          <ThumbsUp className="h-4 w-4" />
-          <span>{votes}</span>
+          <Squiggle className="h-4 w-4 mr-2" />
+          <span>Upvote</span>
+          <span className="ml-2">({votes})</span>
         </Button>
       </div>
       <div className="mb-4 aspect-[9/16] overflow-hidden rounded-lg relative">

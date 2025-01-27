@@ -43,4 +43,5 @@ export interface PropertyOfWeek {
   created_at?: string | null;
   instagram_handle?: string | null;
   email?: string | null;
+  votes: number;
 }

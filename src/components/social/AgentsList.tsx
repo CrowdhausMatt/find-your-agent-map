@@ -132,6 +132,9 @@ const AgentsList = () => {
       </TabsContent>
 
       <TabsContent value="property-of-week">
+        <p className="text-center text-gray-600 mb-8">
+          Vote for your favourite piece of property content this week!
+        </p>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {propertyOfWeek.map((property) => (
             <PropertyOfWeekCard key={property.id} property={property} />
