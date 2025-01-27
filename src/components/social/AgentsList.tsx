@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import AgentSocialCard from "@/components/AgentSocialCard";
+import PropertyOfWeekCard from "@/components/social/PropertyOfWeekCard";
 import { SocialAgent } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
 const AgentsList = () => {
   const [socialLeaders, setSocialLeaders] = useState<SocialAgent[]>([]);
   const [risingStars, setRisingStars] = useState<SocialAgent[]>([]);
+  const [propertyOfWeek, setPropertyOfWeek] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -82,6 +84,17 @@ const AgentsList = () => {
 
         setSocialLeaders(finalLeaders);
         setRisingStars(risingWithTiktok);
+
+        // Fetch property of the week
+        const { data: properties, error: propertiesError } = await supabase
+          .from('property_of_week')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (propertiesError) throw propertiesError;
+
+        setPropertyOfWeek(properties || []);
       } catch (error) {
         console.error('Error fetching agents:', error);
       } finally {
@@ -114,6 +127,14 @@ const AgentsList = () => {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {risingStars.map((agent) => (
             <AgentSocialCard key={agent.id} agent={agent} />
+          ))}
+        </div>
+      </TabsContent>
+
+      <TabsContent value="property-of-week">
+        <div className="grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+          {propertyOfWeek.map((property) => (
+            <PropertyOfWeekCard key={property.id} property={property} />
           ))}
         </div>
       </TabsContent>

@@ -27,9 +27,12 @@ const SocialIndex = () => {
           </p>
           
           <Tabs defaultValue="leaders" className="w-full">
-            <TabsList className="mb-8 grid w-full grid-cols-2 max-w-[400px] mx-auto">
+            <TabsList className="mb-8 grid w-full grid-cols-3 max-w-[600px] mx-auto">
               <TabsTrigger value="leaders">The Social Leaders</TabsTrigger>
               <TabsTrigger value="rising">Rising Stars</TabsTrigger>
+              <TabsTrigger value="property-of-week" className="bg-yellow-400 text-yellow-900 hover:bg-yellow-500 hover:text-yellow-900">
+                Property of the Week!
+              </TabsTrigger>
             </TabsList>
 
             <AgentsList />
