@@ -1,15 +1,9 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { PropertyOfWeek } from "@/types";
 
 interface PropertyOfWeekCardProps {
-  property: {
-    id: string;
-    title: string;
-    description: string;
-    agent_name: string;
-    agency: string;
-    video_url: string;
-  };
+  property: PropertyOfWeek;
 }
 
 const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {

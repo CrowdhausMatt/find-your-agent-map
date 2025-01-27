@@ -54,6 +54,36 @@ export type Database = {
         }
         Relationships: []
       }
+      property_of_week: {
+        Row: {
+          agency: string
+          agent_name: string
+          created_at: string | null
+          description: string | null
+          id: string
+          title: string
+          video_url: string
+        }
+        Insert: {
+          agency: string
+          agent_name: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          title: string
+          video_url: string
+        }
+        Update: {
+          agency?: string
+          agent_name?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          title?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       social_agents: {
         Row: {
           about: string | null

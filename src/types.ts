@@ -32,3 +32,13 @@ export interface SocialAgent {
   isTopEngagement?: boolean;
   video_url?: string | null;
 }
+
+export interface PropertyOfWeek {
+  id: string;
+  title: string;
+  description: string | null;
+  agent_name: string;
+  agency: string;
+  video_url: string;
+  created_at?: string | null;
+}

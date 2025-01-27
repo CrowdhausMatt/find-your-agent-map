@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import AgentSocialCard from "@/components/AgentSocialCard";
 import PropertyOfWeekCard from "@/components/social/PropertyOfWeekCard";
-import { SocialAgent } from "@/types";
+import { SocialAgent, PropertyOfWeek } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
 const AgentsList = () => {
   const [socialLeaders, setSocialLeaders] = useState<SocialAgent[]>([]);
   const [risingStars, setRisingStars] = useState<SocialAgent[]>([]);
-  const [propertyOfWeek, setPropertyOfWeek] = useState<any[]>([]);
+  const [propertyOfWeek, setPropertyOfWeek] = useState<PropertyOfWeek[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
