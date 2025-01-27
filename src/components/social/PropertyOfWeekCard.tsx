@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
-import { Instagram, Mail, ArrowBigUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Instagram, Mail, ArrowBigUp, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyOfWeek } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -13,10 +13,18 @@ interface PropertyOfWeekCardProps {
 const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
   const [votes, setVotes] = useState(property.votes || 0);
   const [isVoting, setIsVoting] = useState(false);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [showHearts, setShowHearts] = useState(false);
   const { toast } = useToast();
 
+  // Check if user has already voted for this property
+  useEffect(() => {
+    const votedProperties = JSON.parse(localStorage.getItem('votedProperties') || '[]');
+    setHasVoted(votedProperties.includes(property.id));
+  }, [property.id]);
+
   const handleVote = async () => {
-    if (isVoting) return;
+    if (isVoting || hasVoted) return;
     
     setIsVoting(true);
     try {
@@ -27,11 +35,21 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
 
       if (error) throw error;
 
+      // Store voted property ID in localStorage
+      const votedProperties = JSON.parse(localStorage.getItem('votedProperties') || '[]');
+      localStorage.setItem('votedProperties', JSON.stringify([...votedProperties, property.id]));
+      
       setVotes(prev => prev + 1);
+      setHasVoted(true);
+      setShowHearts(true);
+      
       toast({
         description: "Thanks for your vote!",
         duration: 2000,
       });
+
+      // Reset hearts animation after a delay
+      setTimeout(() => setShowHearts(false), 1000);
     } catch (error) {
       console.error('Error voting:', error);
       toast({
@@ -62,18 +80,51 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
       transition={{ duration: 0.4 }}
       className="rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition-shadow relative h-full flex flex-col"
     >
-      <div className="w-full mb-4">
+      <div className="w-full mb-4 relative">
         <Button
           onClick={handleVote}
           variant="outline"
-          disabled={isVoting}
-          className="w-full bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#9b87f5] text-white border-none h-12"
+          disabled={isVoting || hasVoted}
+          className={`w-full bg-gradient-to-r from-[#9b87f5] to-[#8B5CF6] hover:from-[#8B5CF6] hover:to-[#9b87f5] text-white border-none h-12 ${hasVoted ? 'opacity-75' : ''}`}
         >
           <ArrowBigUp className="h-4 w-4 mr-2" />
-          <span>Upvote</span>
+          <span>{hasVoted ? 'Voted' : 'Upvote'}</span>
           <span className="ml-2">({votes})</span>
         </Button>
+
+        <AnimatePresence>
+          {showHearts && (
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ 
+                    opacity: 1, 
+                    scale: 0,
+                    x: '50%',
+                    y: '50%'
+                  }}
+                  animate={{ 
+                    opacity: 0,
+                    scale: 1,
+                    x: `${50 + (Math.random() * 60 - 30)}%`,
+                    y: `-${50 + Math.random() * 50}%`
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{ 
+                    duration: 0.8,
+                    delay: i * 0.1
+                  }}
+                  className="absolute"
+                >
+                  <Heart className="h-4 w-4 text-pink-500 fill-pink-500" />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
       </div>
+
       <div className="mb-4 aspect-[9/16] overflow-hidden rounded-lg relative">
         <video 
           src={property.video_url}
@@ -82,6 +133,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
           playsInline
         />
       </div>
+
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xl font-semibold truncate">{property.title}</h3>
       </div>
