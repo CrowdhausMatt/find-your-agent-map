@@ -25,8 +25,8 @@ export function NominateAgentDialog() {
       setIsUploading(true);
 
       // First create the social agent with both flags set to false
-      const { data: agent, error } = await supabase
-        .from('social_agents')
+      const { data: agent, error } = await (supabase
+        .from('social_agents' as any)
         .insert({
           name: data.name,
           agency: data.agency,
@@ -34,9 +34,9 @@ export function NominateAgentDialog() {
           email: `${data.social_handle}@placeholder.com`,
           is_rising_star: false,
           is_leader: false
-        })
+        } as any)
         .select()
-        .single();
+        .single() as any);
 
       if (error) throw error;
 
