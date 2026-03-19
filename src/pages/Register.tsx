@@ -64,7 +64,7 @@ const Register = () => {
           latitude,
           longitude,
           photo: photoUrl,
-        });
+        } as any) as any);
 
       if (error) throw error;
 
