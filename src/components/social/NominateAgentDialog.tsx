@@ -25,7 +25,7 @@ export function NominateAgentDialog() {
       setIsUploading(true);
 
       // First create the social agent with both flags set to false
-      const { data: agent, error } = await supabase
+      const { data: agent, error } = await (supabase as any)
         .from('social_agents')
         .insert({
           name: data.name,

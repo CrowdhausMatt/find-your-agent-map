@@ -28,7 +28,7 @@ const PropertyOfWeekCard = ({ property }: PropertyOfWeekCardProps) => {
     
     setIsVoting(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('property_of_week')
         .update({ votes: votes + 1 })
         .eq('id', property.id);
