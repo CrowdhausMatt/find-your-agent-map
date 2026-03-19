@@ -52,8 +52,8 @@ const Register = () => {
       const [latitude, longitude] = await geocodeLocation(data.area);
 
       // Insert the new agent
-      const { error } = await (supabase
-        .from('agents' as any)
+      const { error } = await (supabase as any)
+        .from('agents')
         .insert({
           name: data.name,
           agency: data.agency,
@@ -64,7 +64,7 @@ const Register = () => {
           latitude,
           longitude,
           photo: photoUrl,
-        } as any) as any);
+        });
 
       if (error) throw error;
 

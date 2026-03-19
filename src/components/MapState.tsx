@@ -56,9 +56,9 @@ export const MapStateProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const { data, error: supabaseError } = await (supabase
-          .from('agents' as any)
-          .select('*') as any);
+        const { data, error: supabaseError } = await (supabase as any)
+          .from('agents')
+          .select('*');
 
         if (supabaseError) throw supabaseError;
 
